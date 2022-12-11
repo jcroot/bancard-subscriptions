@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 
 from products.models import PlanProducts
@@ -20,3 +22,7 @@ class Profile(models.Model):
 class Orders(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
     product_plan = models.ForeignKey(PlanProducts, related_name="product_plan", on_delete=models.DO_NOTHING)
+    order_code = models.CharField(max_length=50, default=uuid.uuid4().hex[:8].upper())
+
+    def __str__(self):
+        return self.order_code
