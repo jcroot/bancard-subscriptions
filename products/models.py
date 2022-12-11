@@ -4,13 +4,17 @@ from django.db import models
 # Create your models here.
 class Plan(models.Model):
     title_plan = models.CharField(max_length=200)
-    price = models.DecimalField(decimal_places=2, max_digits=6, default=0)
+    price = models.DecimalField(decimal_places=2, max_digits=10, default=0)
 
     def __str__(self):
-        return self.title_plan
+        return f'{self.title_plan} - Gs. {self.price}'
 
 
 class Category(models.Model):
+    class Meta:
+        verbose_name = "Category"
+        verbose_name_plural = "Categories"
+
     title_category = models.CharField(max_length=200)
     slug = models.SlugField(null=True)
 
@@ -30,5 +34,9 @@ class Product(models.Model):
 
 
 class PlanProducts(models.Model):
+    class Meta:
+        verbose_name = "Product Plan"
+        verbose_name_plural = "Product Plans"
+
     plan = models.ForeignKey(Plan, on_delete=models.DO_NOTHING)
     product = models.ForeignKey(Product, on_delete=models.DO_NOTHING)
