@@ -17,6 +17,20 @@
 
                             <div class="card-body text-center">
                                 <p class="card-text">{{ product.title_product }}</p>
+                                <div class="py-3">
+                                    <div class="row justify-content-start">
+                                        <div class="col pt-2">
+                                            Plan
+                                        </div>
+                                        <div class="col-10">
+                                            <select class="form-select">
+                                                {% for plan_product in product.planproducts_set.all %}
+                                                    <option>{{ plan_product.plan.title_plan }} - Gs. {{ plan_product.plan.price }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="d-grid gap-2">
                                     <button type="button" class="btn btn-sm btn-primary">Subscribe</button>
                                 </div>
