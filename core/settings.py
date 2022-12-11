@@ -143,3 +143,6 @@ BANCARD_RETURN_URL = env('RETURN_URL')
 BANCARD_CANCEL_URL = env('CANCEL_URL')
 
 DOMAIN_URI = env('DOMAIN_URI')
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
