@@ -287,5 +287,6 @@ fabric.properties
 .idea/
 static/
 /media
+/photos
 
 # End of https://www.toptal.com/developers/gitignore/api/django,pycharm
