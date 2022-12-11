@@ -1,5 +1,6 @@
 from django.shortcuts import render
 
+from customers.forms import CustomerForm
 from products.models import Product
 
 
@@ -15,4 +16,15 @@ def index(request):
 
 
 def checkout(request):
-    return render(request, 'pages/checkout.html')
+    if request.method == "POST":
+        form = CustomerForm(request.POST)
+        if form.is_valid():
+            new_customer = form.save()
+    else:
+        form = CustomerForm()
+
+    context = {
+        'form': form
+    }
+
+    return render(request, 'pages/checkout.html', context)
