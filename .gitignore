@@ -285,5 +285,7 @@ fabric.properties
 .idea/**/azureSettings.xml
 
 .idea/
+static/
+/media
 
 # End of https://www.toptal.com/developers/gitignore/api/django,pycharm

@@ -1,0 +1,32 @@
+version: '3'
+services:
+  db-subscriptions:
+    platform: linux/x86_64
+    image: mysql:8.0
+    command: mysqld --default_authentication_plugin=mysql_native_password
+    environment:
+      MYSQL_DATABASE: 'subscriptions'
+      MYSQL_USER: 'djangouser'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - /tmp/app/mysqld:/var/run/mysqld
+      - my-db:/var/lib/mysql
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+      - /tmp/app/mysqld:/run/mysqld
+    depends_on:
+      - db-subscriptions
+volumes:
+  my-db:
+    driver: local
