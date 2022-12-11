@@ -25,7 +25,7 @@ class BancardAPI:
 
         amount_str = f'{amount}.00'
         token = f'{self.private_key}{shop_process_id}{amount_str}{self.currency}'
-        token = hashlib.md5(token.encode()).hexdigest()
+        token = self.get_token(token)
 
         payload = {
             'public_key': self.public_key,
@@ -52,7 +52,7 @@ class BancardAPI:
         cards_new_url = self.bancard_url + '/vpos/api/0.3/cards/new'
 
         token = f'{self.private_key}{card_id}{user_id}request_new_card'
-        token = hashlib.md5(token.encode()).hexdigest()
+        token = self.get_token(token)
 
         payload = {
             'public_key': self.public_key,
@@ -71,7 +71,7 @@ class BancardAPI:
         users_cards_url = self.bancard_url + f'/vpos/api/0.3/users/{user_id}/cards'
 
         token = f'{self.private_key}{user_id}request_user_cards'
-        token = hashlib.md5(token.encode()).hexdigest()
+        token = self.get_token(token)
 
         payload = {
             'public_key': self.public_key,
@@ -86,7 +86,7 @@ class BancardAPI:
 
         amount_str = f'{amount}.00'
         token = f'{self.private_key}{shop_process_id}charge{amount_str}{self.currency}{alias_token}'
-        token = hashlib.md5(token.encode()).hexdigest()
+        token = self.get_token(token)
 
         payload = {
             'public_key': self.public_key,
@@ -108,7 +108,7 @@ class BancardAPI:
         remove_card_url = self.bancard_url + f'/vpos/api/0.3/users/{user_id}/cards'
 
         token = f'{self.private_key}delete_card{user_id}{alias_token}'
-        token = hashlib.md5(token.encode()).hexdigest()
+        token = self.get_token(token)
 
         payload = {
             'public_key': self.public_key,
@@ -124,7 +124,7 @@ class BancardAPI:
         rollback_url = self.bancard_url + '/vpos/api/0.3/single_buy/rollback'
 
         token = f'{self.private_key}{shop_process_id}rollback0.00'
-        token = hashlib.md5(token.encode()).hexdigest()
+        token = self.get_token(token)
 
         payload = {
             'public_key': self.public_key,
@@ -140,7 +140,7 @@ class BancardAPI:
         confirmation_url = self.bancard_url + '/vpos/api/0.3/single_buy/confirmations'
 
         token = f'{self.private_key}{shop_process_id}get_confirmation'
-        token = hashlib.md5(token.encode()).hexdigest()
+        token = self.get_token(token)
 
         payload = {
             'public_key': self.public_key,
@@ -151,3 +151,6 @@ class BancardAPI:
         }
 
         return requests.post(url=confirmation_url, headers=self.auth_headers, json=payload)
+
+    def get_token(self, token_str):
+        return hashlib.md5(token_str.encode()).hexdigest()
