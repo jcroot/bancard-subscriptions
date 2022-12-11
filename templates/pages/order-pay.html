@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+    <div class="container py-5 text-center">
+        <h3>Thank you</h3>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-8">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="card-text">Now, you need to add one payment method</p>
+
+                        <div class="py-2">
+                            <p class="fw-bold">Order number:</p>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-8 fw-bold">Total</div>
+                            <div class="col-4 text-end">Gs. 12000</div>
+                        </div>
+
+                        <div class="py-5">
+                            <div class="card bg-light">
+                                <div class="card-body text-center">
+                                    <div id="iframe-container">
+                                        <div class="spinner-border" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-4">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="card-text fw-bold">Related subscriptions</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{%  static '/js/bancard-checkout-3.0.0-sandbox.js' %}" ></script>
+    <script>
+        window.onload = function() {
+          Bancard.Cards.createForm('iframe-container', '{{ process_id }}');
+       };
+    </script>
+
+{% endblock %}
