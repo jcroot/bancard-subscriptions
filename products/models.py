@@ -40,3 +40,6 @@ class PlanProducts(models.Model):
 
     plan = models.ForeignKey(Plan, on_delete=models.DO_NOTHING)
     product = models.ForeignKey(Product, on_delete=models.DO_NOTHING)
+
+    def __str__(self):
+        return f'{self.plan.title_plan} - {self.product.title_product} ({self.plan.price})'

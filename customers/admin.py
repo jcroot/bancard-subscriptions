@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from customers.models import Profile
+from customers.models import Profile, Orders, CustomerCards
 
 
 # Register your models here.
@@ -11,4 +11,20 @@ class ProfileAdmin(admin.ModelAdmin):
     list_per_page = 25
 
 
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ('id', 'profile', 'product_plan', 'order_code')
+    list_display_links = ('id', 'profile', 'product_plan')
+    search_fields = ('id', 'order_code', 'profile', 'product_plan')
+    list_per_page = 25
+
+
+class CustomerCardsAdmin(admin.ModelAdmin):
+    list_display = ('id', 'card_masked_number', 'expiration_date', 'customer')
+    list_display_links = ('id', 'card_masked_number', 'customer')
+    search_fields = ('id', 'customer', 'card_masked_number')
+    list_per_page = 25
+
+
 admin.site.register(Profile, ProfileAdmin)
+admin.site.register(Orders, OrderAdmin)
+admin.site.register(CustomerCards, CustomerCardsAdmin)

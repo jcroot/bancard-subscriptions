@@ -14,6 +14,7 @@ class BancardAPI:
         self.currency = 'PYG'
         self.return_url = settings.DOMAIN_URI + settings.BANCARD_RETURN_URL
         self.cancel_url = settings.DOMAIN_URI + settings.BANCARD_CANCEL_URL
+        self.card_return_url = settings.DOMAIN_URI + settings.BANCARD_CARD_RETURN_URL
 
     def create_headers(self):
         return {
@@ -62,7 +63,7 @@ class BancardAPI:
                 'user_id': user_id,
                 'user_cell_phone': phone_number,
                 'user_mail': email_addr,
-                'return_url': self.return_url
+                'return_url': self.card_return_url + str(user_id)
             }
         }
         return requests.post(url=cards_new_url, headers=self.auth_headers, json=payload)
