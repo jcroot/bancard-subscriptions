@@ -48,3 +48,38 @@ class CustomerCards(models.Model):
 
     def __str__(self):
         return f'{self.card_masked_number} - {self.expiration_date}'
+
+
+class CartManager(models.Manager):
+    def create_cart(self, product_plan):
+        session_code = self.get_unique_id()
+        cart = super().create(session_code=session_code, product_plan=product_plan)
+
+        return cart
+
+    def get_unique_id(self):
+        session_code = uuid.uuid4().hex[:8].upper()
+        while Cart.objects.filter(session_code=session_code).exists():
+            session_code = uuid.uuid4().hex[:8].upper()
+        return session_code
+
+
+class Cart(models.Model):
+    class Meta:
+        verbose_name = 'cart'
+        verbose_name_plural = 'carts'
+        ordering = ('-creation_date',)
+
+    creation_date = models.DateTimeField(verbose_name='creation date', auto_now_add=True)
+    checked_out = models.BooleanField(default=False, verbose_name='checked out')
+    session_code = models.CharField(max_length=50)
+    product_plan = models.ForeignKey(PlanProducts, related_name="cart_plan", on_delete=models.DO_NOTHING)
+
+    objects = CartManager()
+
+    def __unicode__(self):
+        return self.creation_date
+
+    def __str__(self):
+        return self.session_code
+

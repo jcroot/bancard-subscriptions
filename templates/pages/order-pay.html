@@ -15,12 +15,12 @@
                         <p class="card-text">Now, you need to add one payment method</p>
 
                         <div class="py-2">
-                            <p class="fw-bold">Order number:</p>
+                            <p class="fw-bold">Order number: {{ order.order_code }}</p>
                         </div>
 
                         <div class="row">
                             <div class="col-8 fw-bold">Total</div>
-                            <div class="col-4 text-end">Gs. 12000</div>
+                            <div class="col-4 text-end">Gs. {{ order.product_plan.plan.price }}</div>
                         </div>
 
                         <div class="py-5">
@@ -42,6 +42,7 @@
                 <div class="card">
                     <div class="card-body">
                         <p class="card-text fw-bold">Related subscriptions</p>
+                        <p>{{ order.product_plan.product.title_product }} {{ order.product_plan.plan.title_plan }}</p>
                     </div>
                 </div>
             </div>

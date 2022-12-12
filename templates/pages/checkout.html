@@ -14,14 +14,14 @@
             </div>
         {% endif %}
 
-        <form action="{% url 'checkout' %}" method="POST" autocomplete="off">
+        <form action="{% url 'checkout' code %}" method="POST" autocomplete="off">
             {% csrf_token %}
             <div class="row">
                 <div class="col-6">
                     <div class="card shadow-sm bg-light">
                         <div class="card-body ">
                             <p class="card-text fw-bold">Billing details</p>
-
+                            <input type="hidden" value="{{ code }}" name="session_code">
                             <div class="row">
                                 <div class="col mb-3">
                                     <label for="exampleFormControlInput1" class="form-label">First Name
@@ -74,10 +74,10 @@
 
                             <div class="row mb-3">
                                 <div class="col-8">
-                                    Monthly Candy Box with Plans - Medium - 50 candies
+                                    {{ product_plan.product.title_product }} - {{ product_plan.plan.title_plan }}
                                 </div>
                                 <div class="col-4 fw-bold text-end">
-                                    Gs. 12000
+                                    Gs. {{ product_plan.plan.price }}
                                 </div>
                             </div>
 
@@ -85,7 +85,7 @@
 
                             <div class="row mb-3">
                                 <div class="col-8 fw-bold">Total</div>
-                                <div class="col-4 text-end fw-bold">Gs. 12000</div>
+                                <div class="col-4 text-end fw-bold">Gs. {{ product_plan.plan.price }}</div>
                             </div>
 
                             <div class="d-grid gap-2">

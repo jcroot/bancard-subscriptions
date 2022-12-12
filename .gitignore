@@ -289,4 +289,6 @@ static/
 /media
 /photos
 
+.env.kinghost
+
 # End of https://www.toptal.com/developers/gitignore/api/django,pycharm

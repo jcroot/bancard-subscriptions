@@ -1,7 +1,8 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
 
 from customers.forms import CustomerForm
-from customers.models import Orders, CustomerCards
+from customers.models import Orders, CustomerCards, Cart
 from data_providers.bancard.request import BancardAPI
 from products.models import Product, PlanProducts
 
@@ -17,20 +18,26 @@ def index(request):
     return render(request, 'pages/index.html', context)
 
 
-def checkout(request):
+def checkout(request, code):
+    cart = get_object_or_404(Cart, session_code=code)
     if request.method == "POST":
         form = CustomerForm(request.POST)
         if form.is_valid():
             new_customer = form.save()
 
-            product_plan = PlanProducts.objects.get(pk=1)
+            product_plan = PlanProducts.objects.get(pk=cart.product_plan.id)
             new_order = Orders(profile=new_customer, product_plan=product_plan)
             new_order.save()
+
+            if new_order:
+                return redirect(reverse('order_pay', kwargs={'code': new_order.order_code}))
     else:
         form = CustomerForm()
 
     context = {
-        'form': form
+        'form': form,
+        'code': code,
+        'product_plan': cart.product_plan,
     }
 
     return render(request, 'pages/checkout.html', context)
@@ -55,7 +62,8 @@ def order_pay(request, code):
         process_id = response_json['process_id']
 
         context.update({
-            'process_id': process_id
+            'process_id': process_id,
+            'order': order
         })
 
     return render(request, 'pages/order-pay.html', context)
@@ -99,3 +107,15 @@ def card_return_url(request, user_id):
             })
 
     return render(request, 'pages/card-status.html', context)
+
+
+def add_item_to_cart(request):
+    if request.method == 'POST':
+        plan_id = request.POST['plan_id']
+        product_plan = PlanProducts.objects.get(pk=plan_id)
+
+        cart = Cart.objects.create_cart(product_plan=product_plan)
+
+        if cart:
+            return redirect(reverse('checkout', kwargs={'code': cart.session_code}))
+

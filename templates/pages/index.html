@@ -11,32 +11,37 @@
         <div class="container">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                 {% for product in products %}
-                    <div class="col">
-                        <div class="card shadow-sm">
-                            <img src="/media/{{ product.image_product }}" alt="image-{{ product.title_product }}" class="img-fluid">
+                    <form action="{% url 'add_item' %}" method="POST" autocomplete="off">
 
-                            <div class="card-body text-center">
-                                <p class="card-text">{{ product.title_product }}</p>
-                                <div class="py-3">
-                                    <div class="row justify-content-start">
-                                        <div class="col pt-2">
-                                            Plan
-                                        </div>
-                                        <div class="col-10">
-                                            <select class="form-select">
-                                                {% for plan_product in product.planproducts_set.all %}
-                                                    <option>{{ plan_product.plan.title_plan }} - Gs. {{ plan_product.plan.price }}</option>
-                                                {% endfor %}
-                                            </select>
+                        {% csrf_token %}
+
+                        <div class="col">
+                            <div class="card shadow-sm">
+                                <img src="/media/{{ product.image_product }}" alt="image-{{ product.title_product }}" class="img-fluid">
+
+                                <div class="card-body text-center">
+                                    <p class="card-text">{{ product.title_product }}</p>
+                                    <div class="py-3">
+                                        <div class="row justify-content-start">
+                                            <div class="col pt-2">
+                                                Plan
+                                            </div>
+                                            <div class="col-10">
+                                                <select class="form-select" name="plan_id">
+                                                    {% for plan_product in product.planproducts_set.all %}
+                                                        <option value="{{ plan_product.id }}">{{ plan_product.plan.title_plan }} - Gs. {{ plan_product.plan.price }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="d-grid gap-2">
-                                    <button type="button" class="btn btn-sm btn-primary">Subscribe</button>
+                                    <div class="d-grid gap-2">
+                                        <button type="submit" class="btn btn-sm btn-primary">Subscribe</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </form>
                 {% endfor %}
             </div>
         </div>
