@@ -1,6 +1,7 @@
 import uuid
 
 from django.db import models
+from django.utils.translation import gettext as _
 
 from products.models import PlanProducts
 
@@ -18,15 +19,29 @@ class Profile(models.Model):
     def __str__(self):
         return f'{self.last_name} {self.first_name}'
 
+class OrderManager(models.Manager):
+    def create_order(self):
+        order_code = self.get_unique_id()
+        order = super().create_order(order_code=order_code)
+
+        return order
+
+    def get_unique_id(self):
+        session_code = uuid.uuid4().hex[:8].upper()
+        while Cart.objects.filter(session_code=session_code).exists():
+            session_code = uuid.uuid4().hex[:8].upper()
+        return session_code
 
 class Orders(models.Model):
     class Meta:
-        verbose_name = 'Order'
-        verbose_name_plural = "Orders"
+        verbose_name = _('Order')
+        verbose_name_plural = _('Orders')
 
     profile = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
     product_plan = models.ForeignKey(PlanProducts, related_name="product_plan", on_delete=models.DO_NOTHING)
-    order_code = models.CharField(max_length=50, default=uuid.uuid4().hex[:8].upper())
+    order_code = models.CharField(max_length=50)
+
+    objects = OrderManager()
 
     def __str__(self):
         return self.order_code
@@ -34,8 +49,8 @@ class Orders(models.Model):
 
 class CustomerCards(models.Model):
     class Meta:
-        verbose_name = 'Customer Card'
-        verbose_name_plural = "Customer Cards"
+        verbose_name = _('Customer Card')
+        verbose_name_plural = _('Customer Cards')
 
     alias_token = models.CharField(max_length=100, null=True, blank=True)
     card_masked_number = models.CharField(max_length=20, null=True, blank=True)
@@ -66,8 +81,8 @@ class CartManager(models.Manager):
 
 class Cart(models.Model):
     class Meta:
-        verbose_name = 'cart'
-        verbose_name_plural = 'carts'
+        verbose_name = _('cart')
+        verbose_name_plural = _('carts')
         ordering = ('-creation_date',)
 
     creation_date = models.DateTimeField(verbose_name='creation date', auto_now_add=True)

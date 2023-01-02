@@ -10,6 +10,9 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ('id','title_product')
     list_per_page = 25
 
+    def delete_model(self, request, obj):
+        print("entre")
+
 
 class PlanAdmin(admin.ModelAdmin):
     list_display = ('id', 'title_plan', 'price')
