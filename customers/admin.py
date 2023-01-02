@@ -1,6 +1,22 @@
+from django import forms
 from django.contrib import admin
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.views.generic import DetailView
 
-from customers.models import Profile, Orders, CustomerCards
+from customers.models import Profile, Orders, CustomerCards, OrderManager
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = [
+            'first_name',
+            'last_name',
+            'company_name',
+            'street_address',
+            'city_name',
+            'phone',
+            'email_address',
+        ]
 
 
 # Register your models here.
@@ -9,7 +25,7 @@ class ProfileAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'first_name', 'last_name')
     search_fields = ('id', 'first_name', 'last_name', 'phone', 'email_address')
     list_per_page = 25
-
+    form = ProfileForm
 
 class OrderAdmin(admin.ModelAdmin):
     list_display = ('id', 'profile', 'product_plan', 'order_code')
