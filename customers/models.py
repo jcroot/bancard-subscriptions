@@ -4,6 +4,7 @@ from django.db import models
 from django.utils.translation import gettext as _
 
 from products.models import PlanProducts
+from data_providers.bancard.request import BancardAPI
 
 
 # Create your models here.
@@ -19,6 +20,7 @@ class Profile(models.Model):
     def __str__(self):
         return f'{self.last_name} {self.first_name}'
 
+
 class OrderManager(models.Manager):
     def create_order(self):
         order_code = self.get_unique_id()
@@ -31,6 +33,7 @@ class OrderManager(models.Manager):
         while Cart.objects.filter(session_code=session_code).exists():
             session_code = uuid.uuid4().hex[:8].upper()
         return session_code
+
 
 class Orders(models.Model):
     class Meta:
@@ -62,8 +65,26 @@ class CustomerCards(models.Model):
     customer = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
 
     def __str__(self):
-        return f'{self.card_masked_number} - {self.expiration_date}'
+        return f'{self.customer.first_name} {self.customer.last_name} - {self.card_masked_number} - {self.expiration_date}'
 
+    def update_alias_token(self):
+        response = BancardAPI().users_cards(self.id)
+        if response:
+            response_json = response.json()
+            if response_json['status'] == 'success':
+                if len(response_json['cards']) > 0:
+                    for card in response_json['cards']:
+                        card_customer = CustomerCards.objects.get(pk=card['card_id'])
+                        if card_customer:
+                            card_customer.alias_token = card['alias_token']
+                            card_customer.card_masked_number = card['card_masked_number']
+                            card_customer.expiration_date = card['expiration_date']
+                            card_customer.card_brand = card['card_brand']
+                            card_customer.card_type = card['card_type']
+                            card_customer.save(update_fields=['alias_token', 'card_masked_number',
+                                                              'expiration_date', 'card_brand', 'card_type'])
+                else:
+                    self.delete()
 
 class CartManager(models.Manager):
     def create_cart(self, product_plan):
@@ -97,4 +118,3 @@ class Cart(models.Model):
 
     def __str__(self):
         return self.session_code
-

@@ -98,9 +98,9 @@ class BancardAPI:
                 'number_of_payments': 1,
                 'currency': self.currency,
                 'additional_data': '',
-                'description': description
+                'description': description,
+                'alias_token': alias_token,
             },
-            'alias_token': alias_token
         }
 
         return requests.post(url=charge_url, headers=self.auth_headers, json=payload)

@@ -1,9 +1,7 @@
 from django import forms
 from django.contrib import admin
-from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.views.generic import DetailView
 
-from customers.models import Profile, Orders, CustomerCards, OrderManager
+from customers.models import Profile, Orders, CustomerCards
 
 class ProfileForm(forms.ModelForm):
     class Meta:

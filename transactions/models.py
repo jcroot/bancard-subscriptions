@@ -3,6 +3,7 @@ from django.db import models
 from customers.models import Orders
 from util.django_ext.models import TimeStampMixin
 
+from customers.models import Profile, CustomerCards
 
 # Create your models here.
 class Transaction(TimeStampMixin):
@@ -25,3 +26,10 @@ class Transaction(TimeStampMixin):
 
     def __str__(self):
         return f'{self.id} - {self.authorization_number}'
+
+
+class Charge(TimeStampMixin):
+    amount = models.DecimalField(decimal_places=2, default=0, max_digits=6)
+    number_of_payments = models.IntegerField(default=1)
+    card = models.ForeignKey(CustomerCards, on_delete=models.DO_NOTHING)
+    status = models.BooleanField(default=False)

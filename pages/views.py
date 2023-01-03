@@ -71,32 +71,19 @@ def order_pay(request, code):
 
 def card_return_url(request, user_id):
     context = {}
-    if request.method == 'GET':
+    if request.method == 'GET' and 'status' in request.GET:
         status = request.GET['status']
 
         if 'add_new_card_success' in status:
-            bancard = BancardAPI()
-            response = bancard.users_cards(user_id)
+            customer_card = CustomerCards.objects.get(pk=user_id)
 
-            if response:
-                response_json = response.json()
+            if customer_card:
+                customer_card.update_alias_token()
 
-                if response_json['status'] == 'success':
-                    for card in response_json['cards']:
-                        card_customer = CustomerCards.objects.get(pk=card['card_id'])
-                        if card_customer:
-                            card_customer.alias_token = card['alias_token']
-                            card_customer.card_masked_number = card['card_masked_number']
-                            card_customer.expiration_date = card['expiration_date']
-                            card_customer.card_brand = card['card_brand']
-                            card_customer.card_type = card['card_type']
-                            card_customer.save(update_fields=['alias_token', 'card_masked_number',
-                                                              'expiration_date', 'card_brand', 'card_type'])
-
-                            context.update({
-                                'status': 'success',
-                                'message': 'You card now is recorded'
-                            })
+                context.update({
+                    'status': 'success',
+                    'message': 'You card now is recorded'
+                })
 
         if 'add_new_card_fail' in status:
             description = request.GET['description']
