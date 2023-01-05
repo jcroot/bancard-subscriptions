@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'customers.apps.CustomersConfig',
     'transactions.apps.TransactionsConfig',
     'django_extensions',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

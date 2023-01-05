@@ -106,3 +106,9 @@ def add_item_to_cart(request):
         if cart:
             return redirect(reverse('checkout', kwargs={'code': cart.session_code}))
 
+
+def confirm_payment(request):
+    if request.method == 'POST':
+        pass
+
+    return {'hola': 'que tal'}
