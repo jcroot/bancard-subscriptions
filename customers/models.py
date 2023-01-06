@@ -20,6 +20,23 @@ class Profile(models.Model):
     def __str__(self):
         return f'{self.last_name} {self.first_name}'
 
+    def check_if_had_alias_token(self):
+        response = BancardAPI().users_cards(self.id)
+        if response:
+            response_json = response.json()
+            if response_json['status'] == 'success' and len(response_json['cards']) > 0:
+                for card in response_json['cards']:
+                    card_customer, created = CustomerCards.objects.get_or_create(
+                        card_masked_number=card['card_masked_number'],
+                        expiration_date=card['expiration_date'],
+                        card_brand=card['card_brand'],
+                        card_type=card['card_type'],
+                        customer_id=self.id
+                    )
+
+                    if card_customer:
+                        card_customer.alias_token = card['alias_token']
+
 
 class OrderManager(models.Manager):
     def create_order(self):
@@ -68,7 +85,7 @@ class CustomerCards(models.Model):
         return f'{self.customer.first_name} {self.customer.last_name} - {self.card_masked_number} - {self.expiration_date}'
 
     def update_alias_token(self):
-        response = BancardAPI().users_cards(self.id)
+        response = BancardAPI().users_cards(self.customer_id)
         if response:
             response_json = response.json()
             if response_json['status'] == 'success':
