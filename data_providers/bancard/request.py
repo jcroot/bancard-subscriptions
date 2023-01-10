@@ -63,7 +63,7 @@ class BancardAPI:
                 'user_id': user_id,
                 'user_cell_phone': phone_number,
                 'user_mail': email_addr,
-                'return_url': self.card_return_url + str(user_id)
+                'return_url': self.card_return_url + str(card_id)
             }
         }
         return requests.post(url=cards_new_url, headers=self.auth_headers, json=payload)

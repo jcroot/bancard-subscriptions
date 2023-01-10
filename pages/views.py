@@ -68,13 +68,13 @@ def order_pay(request, code):
     return render(request, 'pages/order-pay.html', context)
 
 
-def card_return_url(request, user_id):
+def card_return_url(request, card_id):
     context = {}
     if request.method == 'GET' and 'status' in request.GET:
         status = request.GET['status']
 
         if 'add_new_card_success' in status:
-            customer_card = CustomerCards.objects.get(pk=user_id)
+            customer_card = CustomerCards.objects.get(pk=card_id)
 
             if customer_card:
                 customer_card.update_alias_token()
