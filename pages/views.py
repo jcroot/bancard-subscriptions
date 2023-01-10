@@ -26,11 +26,10 @@ def checkout(request, code):
             new_customer = form.save()
 
             product_plan = PlanProducts.objects.get(pk=cart.product_plan.id)
-            new_order = Orders(profile=new_customer, product_plan=product_plan)
-            new_order.save()
+            new_order = Orders.objects.create_order(profile=new_customer, product_plan=product_plan)
 
             if new_order:
-                return redirect(reverse('order_pay', kwargs={'code': new_order.order_code}))
+                return redirect(reverse('order-pay', kwargs={'code': new_order.order_code}))
     else:
         form = CustomerForm()
 

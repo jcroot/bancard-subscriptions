@@ -39,9 +39,9 @@ class Profile(models.Model):
 
 
 class OrderManager(models.Manager):
-    def create_order(self):
+    def create_order(self, profile, product_plan):
         order_code = self.get_unique_id()
-        order = super().create_order(order_code=order_code)
+        order = super().create(order_code=order_code, profile=profile, product_plan=product_plan)
 
         return order
 
