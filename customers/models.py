@@ -1,8 +1,11 @@
 import uuid
 
+from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import PermissionsMixin, AbstractUser
 from django.db import models
 from django.utils.translation import gettext as _
 
+from core import settings
 from products.models import PlanProducts
 from data_providers.bancard.request import BancardAPI
 
@@ -16,6 +19,8 @@ class Profile(models.Model):
     city_name = models.CharField(max_length=100)
     phone = models.CharField(max_length=50)
     email_address = models.CharField(max_length=100)
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
 
     def __str__(self):
         return f'{self.last_name} {self.first_name}'
@@ -36,6 +41,46 @@ class Profile(models.Model):
 
                     if card_customer:
                         card_customer.alias_token = card['alias_token']
+
+
+class UserProfileManager(BaseUserManager):
+    """ Manager for user profiles """
+    def create_user(self, email, name, password=None):
+        """ Create a new user profile """
+        if not email:
+            raise ValueError('User must have an email address')
+
+        email = self.normalize_email(email)
+        user = self.model(email=email, name=name)
+
+        user.set_password(password)
+        user.save(using=self._db)
+
+        return user
+
+    def create_superuser(self, email, name, password):
+        """ Create a new superuser profile """
+        user = self.create_user(email, name, password)
+        user.is_superuser = True
+        user.is_staff = True
+
+        user.save(using=self._db)
+
+        return user
+
+
+class UserProfile(AbstractUser, PermissionsMixin):
+    email = models.EmailField(max_length=233, unique=True)
+    name = models.CharField(max_length=255)
+
+    objects = UserProfileManager()
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['name']
+
+    def __str__(self):
+        """Return string representation of our user"""
+        return self.email
 
 
 class OrderManager(models.Manager):
@@ -102,6 +147,7 @@ class CustomerCards(models.Model):
                                                               'expiration_date', 'card_brand', 'card_type'])
                 else:
                     self.delete()
+
 
 class CartManager(models.Manager):
     def create_cart(self, product_plan):

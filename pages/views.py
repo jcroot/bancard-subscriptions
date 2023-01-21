@@ -1,9 +1,11 @@
+from django.contrib.auth.models import User
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 
 from customers.forms import CustomerForm
 from customers.models import Orders, CustomerCards, Cart
 from data_providers.bancard.request import BancardAPI
+from pages.forms import NewUserForm
 from products.models import Product, PlanProducts
 
 
@@ -24,6 +26,9 @@ def checkout(request, code):
         form = CustomerForm(request.POST)
         if form.is_valid():
             new_customer = form.save()
+
+            if new_customer:
+                user = User.objects.create_user(email=new_customer.email, password="abcd1234")
 
             product_plan = PlanProducts.objects.get(pk=cart.product_plan.id)
             new_order = Orders.objects.create_order(profile=new_customer, product_plan=product_plan)
