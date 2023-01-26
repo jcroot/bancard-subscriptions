@@ -3,38 +3,40 @@
 {% block content %}
 
     <div class="container py-5">
-        <h1 class="text-center">Bienvenido/a {{ customer.name }}</h1>
+        <h1 class="text-center">Mi Perfil</h1>
 
         <div class="card mb-3">
             <div class="card-body">
                 <div class="row mb-3">
                     <label class="col-2 text-end">Nombre completo:</label>
                     <div class="col-8">
-                        Tadeo Nicolas Adams Zorrilla
+                        {{ customer.first_name }} {{ customer.last_name }}
                     </div>
                 </div>
 
                 <div class="row mb-3">
                     <label class="col-2 text-end">Direccion:</label>
                     <div class="col-6">
-                        Virgen del Rosario 110 c/ Ypacarai
+                        {{ customer.street_address }}
                     </div>
                     <div class="col-4">
-                        Villa Elisa
+                        {{ customer.city_name }}
                     </div>
                 </div>
 
                 <div class="row mb-3">
                     <label class="col-2 text-end">Telefono:</label>
                     <div class="col-8">
-                        0981 833415
+                        {{ customer.phone }}
                     </div>
                 </div>
 
                 <div class="row mb-3">
                     <label class="col-2 text-end">Plan Adquirido:</label>
                     <div class="col-8">
-                        Plan Anual
+                        {% for order in orders %}
+                            {{ order.product_plan }}
+                        {% endfor %}
                     </div>
                 </div>
             </div>

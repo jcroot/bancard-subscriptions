@@ -15,7 +15,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 class PlanAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title_plan', 'price')
+    list_display = ('id', 'title_plan', 'price', 'installments')
     list_display_links = ('id', 'title_plan')
     search_fields = ('id', 'title_plan', 'price')
     list_per_page = 25

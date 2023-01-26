@@ -2,7 +2,7 @@ from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from customers.models import Profile, Orders, CustomerCards, UserProfile
+from customers.models import Profile, Orders, CustomerCards, User
 
 
 class ProfileForm(forms.ModelForm):
@@ -44,4 +44,3 @@ class CustomerCardsAdmin(admin.ModelAdmin):
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Orders, OrderAdmin)
 admin.site.register(CustomerCards, CustomerCardsAdmin)
-admin.site.register(UserProfile, UserAdmin)

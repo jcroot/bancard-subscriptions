@@ -1,17 +1,23 @@
-from django.contrib import messages
+from django.contrib import messages, auth
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 
-from customers.models import CustomerCards
+from customers.models import CustomerCards, Profile
 from data_providers.bancard.request import BancardAPI
 
 
 # Create your views here.
+@login_required(login_url='/customer/login')
 def profile(request):
-    cards = CustomerCards.objects.filter(customer_id=3).all()
+    cards = CustomerCards.objects.filter(customer__user=request.user).all()
+
+    customer = Profile.objects.get(pk=request.user.id)
 
     context = {
-        'cards': cards
+        'cards': cards,
+        'customer': customer,
+        'orders': customer.orders_set.all()
     }
 
     return render(request, 'pages/customer/profile.html', context)
@@ -33,4 +39,23 @@ def delete_card(request, card_id):
 
 
 def login(request):
+    if request.method == 'POST':
+        username = request.POST['emailAddress']
+        password = request.POST['password']
+        code = request.POST['code']
+
+        user = auth.authenticate(email=username.lower(), password=password)
+        if user is not None:
+            auth.login(request, user)
+            messages.success(request, 'Your are now logged in')
+            return redirect(reverse('checkout', kwargs={'code': code}))
+        else:
+            messages.error(request, 'Invalid credentials')
+            return redirect(reverse('checkout', kwargs={'code': code}))
+
     return render(request, 'pages/customer/login.html')
+
+def logout(request):
+    auth.logout(request)
+    messages.success(request, 'Your are now logged out')
+    return redirect('index')

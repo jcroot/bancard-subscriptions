@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 
 from customers.forms import CustomerForm
-from customers.models import Orders, CustomerCards, Cart
+from customers.models import Orders, CustomerCards, Cart, UserProfile
 from data_providers.bancard.request import BancardAPI
 from pages.forms import NewUserForm
 from products.models import Product, PlanProducts
@@ -25,16 +25,17 @@ def checkout(request, code):
     if request.method == "POST":
         form = CustomerForm(request.POST)
         if form.is_valid():
-            new_customer = form.save()
+            user = UserProfile.objects.create_user(form.cleaned_data['email_address'], 'abcd1234')
 
-            if new_customer:
-                user = User.objects.create_user(email=new_customer.email, password="abcd1234")
+            if user is not None:
+                form.cleaned_data['user_id'] = user.id
+                new_customer = form.save()
 
-            product_plan = PlanProducts.objects.get(pk=cart.product_plan.id)
-            new_order = Orders.objects.create_order(profile=new_customer, product_plan=product_plan)
+                product_plan = PlanProducts.objects.get(pk=cart.product_plan.id)
+                new_order = Orders.objects.create_order(profile=new_customer, product_plan=product_plan)
 
-            if new_order:
-                return redirect(reverse('order-pay', kwargs={'code': new_order.order_code}))
+                if new_order:
+                    return redirect(reverse('order-pay', kwargs={'code': new_order.order_code}))
     else:
         form = CustomerForm()
 

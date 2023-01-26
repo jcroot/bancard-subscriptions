@@ -14,37 +14,52 @@
             </div>
         {% endif %}
 
-        <form class="mb-3">
-            {% csrf_token %}
-            <div class="row">
-                <div class="col-6">
-                    <div class="card shadow-sm bg-light">
-                        <div class="card-body">
-                            <p class="card-text fw-bold">I have an account</p>
-                            <div class="mb-3">
-                                <label for="emailAddress" class="form-label">Email address
-                                    <abbr class="required" title="required">*</abbr></label>
-                                <input type="email" class="form-control" id="emailAddress"
-                                       name="emailAddress">
-                            </div>
 
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Password
-                                    <abbr class="required" title="required">*</abbr></label>
-                                <input type="password" class="form-control" id="password"
-                                       name="password">
-                            </div>
+        {% include 'pages/customer/_partials/_messages.html' %}
 
-                            <div class="d-grid gap-2">
-                                <button type="submit" class="btn btn-sm btn-primary text-uppercase py-3">Sign In
-                                </button>
+        {% if not user.is_authenticated %}
+            <form class="mb-3" method="POST" autocomplete="off" action="{% url 'login' %}">
+                {% csrf_token %}
+
+                <input type="hidden" value="{{ code }}" name="code" >
+
+                <div class="row">
+                    <div class="col-6">
+                        <div class="card shadow-sm bg-light">
+                            <div class="card-body">
+                                <p class="card-text fw-bold">I have an account</p>
+                                <div class="mb-3">
+                                    <label for="emailAddress" class="form-label">Email address
+                                        <abbr class="required" title="required">*</abbr></label>
+                                    <input type="email" class="form-control" id="emailAddress"
+                                           name="emailAddress" autofocus>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Password
+                                        <abbr class="required" title="required">*</abbr></label>
+                                    <input type="password" class="form-control" id="password"
+                                           name="password">
+                                </div>
+
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-sm btn-primary text-uppercase py-3">Sign In
+                                    </button>
+                                </div>
                             </div>
                         </div>
+                        <div class="py-2 text-center">-- Or --</div>
                     </div>
-                    <div class="py-2 text-center">-- Or --</div>
+                </div>
+            </form>
+        {% else %}
+            <div class="py-2">
+                <div class="row">
+                    <div class="col-6"><a href="{% url 'profile' %}" class="btn btn-primary">My Profile</a></div>
+                    <div class="col-6 text-end"><a href="{% url 'logout' %}">Logout</a></div>
                 </div>
             </div>
-        </form>
+        {% endif %}
 
         <form action="{% url 'checkout' code %}" method="POST" autocomplete="off">
             {% csrf_token %}
@@ -59,7 +74,7 @@
                                     <label for="exampleFormControlInput1" class="form-label">First Name
                                         <abbr class="required" title="required">*</abbr></label>
                                     <input type="text" class="form-control" id="exampleFormControlInput1"
-                                           name="first_name" autofocus
+                                           name="first_name"
                                            required>
                                 </div>
                                 <div class="col mb-3">

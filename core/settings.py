@@ -150,5 +150,12 @@ BANCARD_CARD_RETURN_URL = env('RETURN_CARD_URL')
 
 DOMAIN_URI = env('DOMAIN_URI')
 
+# Messages
+from django.contrib.messages import constants as messages
+
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger'
+}
+
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'

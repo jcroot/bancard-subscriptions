@@ -12,5 +12,13 @@ class CustomerForm(forms.ModelForm):
             "street_address",
             "city_name",
             "phone",
-            "email_address"
+            "email_address",
         )
+
+    def save(self, commit=True):
+        profile = super(CustomerForm, self).save(commit=False)
+        profile.email_address = self.cleaned_data['email_address']
+        profile.user_id = self.cleaned_data['user_id']
+        if commit:
+            profile.save()
+        return profile

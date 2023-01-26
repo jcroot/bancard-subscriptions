@@ -1,14 +1,4 @@
-{% if messages %}
-
-   <div class="py-2">
-       {% for message in messages %}
-            <div class="alert {% if message.tags %} alert-{{ message.tags }} {% endif %}">
-                {{ message }}
-            </div>
-       {% endfor %}
-   </div>
-
-{% endif %}
+{% include 'pages/customer/_partials/_messages.html' %}
 
 <table class="table table-hover table-striped mt-4">
     <thead>
@@ -39,7 +29,7 @@
             {% endfor %}
         {% else %}
             <tr>
-                <td colspan="4">No hay registros</td>
+                <td colspan="6">No hay registros</td>
             </tr>
         {% endif %}
     </tbody>
