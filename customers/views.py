@@ -1,4 +1,5 @@
 from django.contrib import messages, auth
+from django.db import transaction
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
@@ -24,7 +25,11 @@ def profile(request):
                 pass # add new card
 
     cards = CustomerCards.objects.filter(customer__user=request.user).all()
-    customer = Profile.objects.get(user_id=request.user.id)
+    with transaction.atomic():
+        for card in cards:
+            card.update_alias_token()
+
+        customer = Profile.objects.get(user_id=request.user.id)
 
     context = {
         'cards': cards,
