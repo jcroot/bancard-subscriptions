@@ -11,8 +11,7 @@ from data_providers.bancard.request import BancardAPI
 @login_required(login_url='/customer/login')
 def profile(request):
     cards = CustomerCards.objects.filter(customer__user=request.user).all()
-
-    customer = Profile.objects.get(pk=request.user.id)
+    customer = Profile.objects.get(user_id=request.user.id)
 
     context = {
         'cards': cards,
