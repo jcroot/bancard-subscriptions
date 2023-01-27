@@ -47,10 +47,14 @@ def login(request):
         if user is not None:
             auth.login(request, user)
             messages.success(request, 'Your are now logged in')
-            return redirect(reverse('checkout', kwargs={'code': code}))
+            if code:
+                return redirect(reverse('checkout', kwargs={'code': code}))
+            else:
+                return redirect(reverse('profile'))
         else:
             messages.error(request, 'Invalid credentials')
-            return redirect(reverse('checkout', kwargs={'code': code}))
+            if code:
+                return redirect(reverse('checkout', kwargs={'code': code}))
 
     return render(request, 'pages/customer/login.html')
 

@@ -3,7 +3,14 @@
 {% block content %}
 
     <div class="container py-5">
-        <h1 class="text-center">Mi Perfil</h1>
+        <div class="row">
+            <di class="col-6">
+                <h1>Mi Perfil</h1>
+            </di>
+            <di class="col-6 text-end">
+                <a href="{% url 'logout' %}" class="btn btn-link">Logout</a>
+            </di>
+        </div>
 
         <div class="card mb-3">
             <div class="card-body">

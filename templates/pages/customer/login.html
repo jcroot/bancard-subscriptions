@@ -27,15 +27,23 @@
     </style>
 
     <div class="form-signin w-100 m-auto">
-        <form autocomplete="off">
+
+        {% include 'pages/customer/_partials/_messages.html' %}
+
+        <form autocomplete="off" method="post" action="{% url 'login' %}">
+
+            {% csrf_token %}
+
             <h1 class="h3 mb-3 fw-normal">Ingresa a tu cuenta</h1>
 
+            <input type="hidden" name="code" id="code" value="">
+
             <div class="form-floating">
-                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" required autofocus>
+                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" required autofocus name="emailAddress">
                 <label for="floatingInput">Correo electronico</label>
             </div>
             <div class="form-floating">
-                <input type="password" class="form-control" id="floatingPassword" placeholder="Clave" required>
+                <input type="password" class="form-control" id="floatingPassword" placeholder="Clave" name="password" required>
                 <label for="floatingPassword">Clave</label>
             </div>
 
