@@ -1,11 +1,8 @@
 {% if messages %}
-
-   <div class="py-2">
-       {% for message in messages %}
-            <div class="alert {% if message.tags %} alert-{{ message.tags }} {% endif %}">
-                {{ message }}
-            </div>
-       {% endfor %}
-   </div>
-
+    {% for message in messages %}
+        <div class="alert {% if message.tags %} alert-{{ message.tags }} {% endif %} alert-dismissible fade show" tabindex="-1">
+            <span>{{ message }}</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
 {% endif %}

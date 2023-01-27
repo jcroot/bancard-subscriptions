@@ -4,7 +4,23 @@
 
 {% block content %}
     <div class="container py-5">
-        <h3>Select one subscription</h3>
+        <div class="row">
+            <div class="col-6">
+                <h3>Select one subscription</h3>
+            </div>
+            <div class="col-6">
+                {% if user.is_authenticated %}
+                    <div class="text-end">
+                        <a href="{% url 'profile' %}" class="btn btn-link">Mi Profile</a>
+                        <a href="{% url 'logout' %}" class="btn btn-link">Logout</a>
+                    </div>
+                {% else %}
+                    <div class="text-end">
+                        <a href="{% url 'login' %}" class="btn btn-primary">Sign-In</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
     </div>
 
     <div class="album py-5 bg-light">
