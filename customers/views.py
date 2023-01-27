@@ -10,6 +10,19 @@ from data_providers.bancard.request import BancardAPI
 # Create your views here.
 @login_required(login_url='/customer/login')
 def profile(request):
+    if request.method == "POST":
+        option = request.POST["selector"]
+        card_id = request.POST["card_select_id"]
+
+        option = int(option)
+        if int(option) > 0:
+            if option == 1:
+                card = CustomerCards.objects.get(pk=card_id)
+                card.is_default = True
+                card.save(update_fields=['is_default']) # select card by default
+            elif option == 2:
+                pass # add new card
+
     cards = CustomerCards.objects.filter(customer__user=request.user).all()
     customer = Profile.objects.get(user_id=request.user.id)
 
