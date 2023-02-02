@@ -1,0 +1,31 @@
+<div class="card">
+    <div class="card-body">
+        <p class="card-text fw-bold">Your order</p>
+        <div class="row mb-3">
+            <div class="col fw-bold">Product</div>
+            <div class="col fw-bold text-end">Subtotal</div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-8">
+                {{ product_plan.product.title_product }} - {{ product_plan.plan.title_plan }}
+            </div>
+            <div class="col-4 fw-bold text-end">
+                Gs. {{ product_plan.plan.price }}
+            </div>
+        </div>
+
+        <hr size="1">
+
+        <div class="row mb-3">
+            <div class="col-8 fw-bold">Total</div>
+            <div class="col-4 text-end fw-bold">Gs. {{ product_plan.plan.price }}</div>
+        </div>
+
+        <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-sm btn-primary text-uppercase py-3">Signup Now
+            </button>
+        </div>
+
+    </div>
+</div>

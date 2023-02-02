@@ -83,7 +83,9 @@ class Profile(models.Model):
 class OrderManager(models.Manager):
     def create_order(self, profile, product_plan):
         order_code = self.get_unique_id()
-        order = super().create(order_code=order_code, profile=profile, product_plan=product_plan)
+        order = self.check_if_not_duplicate(profile=profile, product_plan=product_plan)
+        if not order:
+            order = super().create(order_code=order_code, profile=profile, product_plan=product_plan)
 
         return order
 
@@ -92,6 +94,9 @@ class OrderManager(models.Manager):
         while Cart.objects.filter(session_code=session_code).exists():
             session_code = uuid.uuid4().hex[:8].upper()
         return session_code
+
+    def check_if_not_duplicate(self, profile, product_plan):
+        return super().filter(profile=profile, product_plan=product_plan).first()
 
 
 class Orders(models.Model):

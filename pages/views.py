@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 
 from customers.forms import CustomerForm
-from customers.models import Orders, CustomerCards, Cart, UserProfile
+from customers.models import Orders, CustomerCards, Cart, UserProfile, Profile
 from data_providers.bancard.request import BancardAPI
 from pages.forms import NewUserForm
 from products.models import Product, PlanProducts
@@ -22,20 +22,26 @@ def index(request):
 
 def checkout(request, code):
     cart = get_object_or_404(Cart, session_code=code)
+    new_order = None
     if request.method == "POST":
         form = CustomerForm(request.POST)
-        if form.is_valid():
-            user = UserProfile.objects.create_user(form.cleaned_data['email_address'], 'abcd1234')
+        if request.user.is_authenticated:
+            product_plan = PlanProducts.objects.get(pk=cart.product_plan.id)
+            user_profile = Profile.objects.filter(user_id=request.user.id).first()
+            if user_profile:
+                new_order = Orders.objects.create_order(profile=user_profile, product_plan=product_plan)
+        else:
+            if form.is_valid():
+                user = UserProfile.objects.create_user(form.cleaned_data['email_address'], 'abcd1234')
+                if user is not None:
+                    form.cleaned_data['user_id'] = user.id
+                    new_customer = form.save()
 
-            if user is not None:
-                form.cleaned_data['user_id'] = user.id
-                new_customer = form.save()
+                    product_plan = PlanProducts.objects.get(pk=cart.product_plan.id)
+                    new_order = Orders.objects.create_order(profile=new_customer, product_plan=product_plan)
 
-                product_plan = PlanProducts.objects.get(pk=cart.product_plan.id)
-                new_order = Orders.objects.create_order(profile=new_customer, product_plan=product_plan)
-
-                if new_order:
-                    return redirect(reverse('order-pay', kwargs={'code': new_order.order_code}))
+        if new_order:
+            return redirect(reverse('order-pay', kwargs={'code': new_order.order_code}))
     else:
         form = CustomerForm()
 
@@ -80,7 +86,7 @@ def card_return_url(request, card_id):
         status = request.GET['status']
 
         if 'add_new_card_success' in status:
-            customer_card = CustomerCards.objects.get(pk=card_id)
+            customer_card = get_object_or_404(CustomerCards, pk=card_id)
 
             if customer_card:
                 customer_card.update_alias_token()
