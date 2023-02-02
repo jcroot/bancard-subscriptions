@@ -40,10 +40,20 @@
 
                 <div class="row mb-3">
                     <label class="col-2 text-end">Plan Adquirido:</label>
-                    <div class="col-8">
-                        {% for order in orders %}
-                            {{ order.product_plan }}
-                        {% endfor %}
+                    <div class="col-6">
+                        <select class="form-select">
+                            {% for order in orders %}
+                                <option value="">{{ order.product_plan }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-4">
+                        <input type="submit" class="btn btn-primary" value="Pagar">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 offset-2">
+                        <small class="fw-bold">Recuerde que debe seleccionar una tarjeta para este cobro</small>
                     </div>
                 </div>
             </div>
