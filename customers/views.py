@@ -4,8 +4,9 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
-from customers.models import CustomerCards, Profile
+from customers.models import CustomerCards, Profile, Orders
 from data_providers.bancard.request import BancardAPI
+from transactions.models import Transaction
 
 
 # Create your views here.
@@ -20,9 +21,35 @@ def profile(request):
             if option == 1:
                 card = CustomerCards.objects.get(pk=card_id)
                 card.is_default = True
-                card.save(update_fields=['is_default']) # select card by default
+                card.save(update_fields=['is_default'])  # select card by default
             elif option == 2:
-                pass # add new card
+                pass  # add new card
+            elif option == 3:  # charge to the default card
+                order = Orders.objects.get(pk=card_id)  # card_id change for generic id
+                if order:
+                    new_transaction = Transaction.objects.create_transaction(order=order)
+                    if new_transaction:
+                        response = BancardAPI().charge(shop_process_id=new_transaction.id,
+                                                       amount=new_transaction.amount,
+                                                       description=order.product_plan.plan.title_plan,
+                                                       alias_token=new_transaction.card.alias_token,
+                                                       number_of_payments=new_transaction.number_of_payments)
+
+                        if response:
+                            response_json = response.json()
+                            if response_json['status'] == 'success':
+                                if new_transaction.id == response_json['confirmation']['shop_process_id']:
+                                    new_transaction.response = response_json['confirmation']['response']
+                                    new_transaction.response_details = response_json['confirmation']['response_details']
+                                    new_transaction.authorization_number = response_json['confirmation'][
+                                        'authorization_number']
+                                    new_transaction.ticket_number = response_json['confirmation']['ticket_number']
+                                    new_transaction.response_code = response_json['confirmation']['response_code']
+                                    new_transaction.response_description = response_json['confirmation'][
+                                        'response_description']
+                                    new_transaction.security_information = response_json['confirmation'][
+                                        'security_information']
+                                    new_transaction.save()
 
     cards = CustomerCards.objects.filter(customer__user=request.user).all()
     with transaction.atomic():
@@ -75,6 +102,7 @@ def login(request):
                 return redirect(reverse('checkout', kwargs={'code': code}))
 
     return render(request, 'pages/customer/login.html')
+
 
 def logout(request):
     auth.logout(request)

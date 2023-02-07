@@ -38,19 +38,23 @@
                     </div>
                 </div>
 
-                <div class="row mb-3">
-                    <label class="col-2 text-end">Plan Adquirido:</label>
-                    <div class="col-6">
-                        <select class="form-select">
-                            {% for order in orders %}
-                                <option value="">{{ order.product_plan }}</option>
-                            {% endfor %}
-                        </select>
+                <form method="post" action="{% url 'profile' %}" autocomplete="off">
+                    <input type="hidden" value="3" name="selector" id="another-selector">
+                    {% csrf_token %}
+                    <div class="row mb-3">
+                        <label class="col-2 text-end">Plan Adquirido:</label>
+                        <div class="col-6">
+                            <select class="form-select" name="card_select_id" id="card_select_id">
+                                {% for order in orders %}
+                                    <option value="{{ order.id }}">{{ order.product_plan }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <input type="submit" class="btn btn-primary" value="Pagar">
+                        </div>
                     </div>
-                    <div class="col-4">
-                        <input type="submit" class="btn btn-primary" value="Pagar">
-                    </div>
-                </div>
+                </form>
                 <div class="row">
                     <div class="col-6 offset-2">
                         <small class="fw-bold">Recuerde que debe seleccionar una tarjeta para este cobro</small>

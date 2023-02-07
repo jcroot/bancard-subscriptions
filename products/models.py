@@ -6,6 +6,7 @@ class Plan(models.Model):
     title_plan = models.CharField(max_length=200)
     price = models.DecimalField(decimal_places=2, max_digits=10, default=0)
     installments = models.SmallIntegerField(default=1)
+    fee_amount = models.DecimalField(decimal_places=2, max_digits=10, default=0)
 
 
     def __str__(self):

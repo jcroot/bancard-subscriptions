@@ -82,7 +82,7 @@ class BancardAPI:
         }
         return requests.post(url=users_cards_url, headers=self.auth_headers, json=payload)
 
-    def charge(self, shop_process_id, amount, description, alias_token):
+    def charge(self, shop_process_id, amount, description, alias_token, number_of_payments=1):
         charge_url = self.bancard_url + '/vpos/api/0.3/charge'
 
         amount_str = f'{amount}.00'
@@ -95,7 +95,7 @@ class BancardAPI:
                 'token': token,
                 'shop_process_id': shop_process_id,
                 'amount': amount_str,
-                'number_of_payments': 1,
+                'number_of_payments': number_of_payments,
                 'currency': self.currency,
                 'additional_data': '',
                 'description': description,

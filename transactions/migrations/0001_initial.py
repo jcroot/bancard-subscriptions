@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('amount', models.DecimalField(decimal_places=2, default=0, max_digits=6)),
+                ('amount', models.DecimalField(decimal_places=2, default=0, max_digits=10)),
                 ('currency', models.CharField(max_length=4)),
                 ('number_of_payments', models.IntegerField(default=1)),
                 ('additional_data', models.CharField(blank=True, max_length=100, null=True)),
@@ -34,20 +34,6 @@ class Migration(migrations.Migration):
                 ('response_description', models.CharField(blank=True, max_length=50, null=True)),
                 ('security_information', models.CharField(blank=True, max_length=255, null=True)),
                 ('order', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='customers.orders')),
-            ],
-            options={
-                'abstract': False,
-            },
-        ),
-        migrations.CreateModel(
-            name='Charge',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('amount', models.DecimalField(decimal_places=2, default=0, max_digits=6)),
-                ('number_of_payments', models.IntegerField(default=1)),
-                ('status', models.BooleanField(default=False)),
                 ('card', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='customers.customercards')),
             ],
             options={
