@@ -69,7 +69,7 @@ def profile(request):
 
     context = {
         'cards': cards,
-        'customer': customer,
+        'customer': customer.first(),
         'orders': customer.get().orders_set.all(),
         'transactions': transaction_data
     }
