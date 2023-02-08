@@ -9,6 +9,7 @@ from core import settings
 from products.models import PlanProducts
 from data_providers.bancard.request import BancardAPI
 
+
 # Create your models here.
 class UserManager(BaseUserManager):
     use_in_migrations = True
@@ -148,7 +149,10 @@ class CustomerCards(models.Model):
                             card_customer.save(update_fields=['alias_token', 'card_masked_number',
                                                               'expiration_date', 'card_brand', 'card_type'])
                 else:
-                    self.delete()
+                    from transactions.models import Transaction
+                    transactions = Transaction.objects.filter(card_id=self.id)
+                    if not transactions.exists():
+                        self.delete()
 
 
 class CartManager(models.Manager):

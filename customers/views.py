@@ -20,8 +20,9 @@ def profile(request):
         if int(option) > 0:
             if option == 1:
                 card = CustomerCards.objects.get(pk=card_id)
-                card.is_default = True
-                card.save(update_fields=['is_default'])  # select card by default
+                if card:
+                    card.is_default = True
+                    card.save(update_fields=['is_default'])  # select card by default
             elif option == 2:
                 pass  # add new card
             elif option == 3:  # charge to the default card
@@ -70,16 +71,20 @@ def profile(request):
 def delete_card(request, card_id):
     if request.method == 'GET':
         card = CustomerCards.objects.get(pk=card_id)
-        if card:
-            response = BancardAPI().remove_card(user_id=card.customer_id, alias_token=card.alias_token)
-            response_json = response.json()
-            if response_json['status'] == 'success':
-                card.delete()
-                messages.success(request, "Tarjeta eliminada.", extra_tags="success")
-            else:
-                messages.error(request, "La tarjeta no existe o hubo un error al eliminar.", extra_tags="danger")
+        transactions = Transaction.objects.filter(card=card)
+        if not transactions.exists():
+            if card:
+                response = BancardAPI().remove_card(user_id=card.customer_id, alias_token=card.alias_token)
+                response_json = response.json()
+                if response_json['status'] == 'success':
+                    card.delete()
+                    messages.success(request, "Tarjeta eliminada.", extra_tags="success")
+                else:
+                    messages.error(request, "La tarjeta no existe o hubo un error al eliminar.", extra_tags="danger")
+        else:
+            messages.error(request, "No se puede eliminar esta tarjeta por que tiene transacciones asociadas.")
 
-            return redirect(reverse('profile'))
+        return redirect(reverse('profile'))
 
 
 def login(request):
