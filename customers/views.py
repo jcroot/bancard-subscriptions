@@ -57,12 +57,15 @@ def profile(request):
         for card in cards:
             card.update_alias_token()
 
-        customer = Profile.objects.get(user_id=request.user.id)
+        customer = Profile.objects.filter(user_id=request.user.id)
+        if not customer:
+            messages.error(request, "Usuario no existe o es admin")
+            return redirect(reverse('index'))
 
     context = {
         'cards': cards,
         'customer': customer,
-        'orders': customer.orders_set.all()
+        'orders': customer.get().orders_set.all()
     }
 
     return render(request, 'pages/customer/profile.html', context)
