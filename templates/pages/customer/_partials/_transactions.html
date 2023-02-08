@@ -1,0 +1,62 @@
+<div class="mt-2 py-2">
+    <form id="myform" action="{% url 'profile' %}" method="post">
+
+        {% csrf_token %}
+
+        <div class="row">
+            <label class="col-2 col-form-label text-end">Action</label>
+            <div class="col-4">
+                <select class="form-select" name="selector">
+                    <option value="0" selected>--------</option>
+                    <option value="1">Select by default</option>
+                    <option value="2">Add new credit / debit card</option>
+                </select>
+            </div>
+            <input type="hidden" value="" name="card_select_id" id="card_select_id">
+            <div class="col-6">
+                <button type="submit" class="btn btn-outline-primary">Go</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+
+    const setValue = card_id => {
+        document.getElementById('card_select_id').value = card_id
+    }
+
+</script>
+
+<table class="table table-hover table-striped mt-4">
+    <thead>
+    <tr>
+        <th>&nbsp;</th>
+        <th>Plan</th>
+        <th>Orden</th>
+        <th>Monto a cobrar</th>
+        <th>Estado</th>
+        <th>&nbsp;</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% if transactions %}
+        {% for transaction in transactions %}
+            <tr>
+                <td>{{ transaction.id }}</td>
+                <td>{{ transaction.order.product_plan.plan.title_plan }}</td>
+                <td>{{ transaction.order.id }}</td>
+                <td>{{ transaction.amount }}</td>
+                <td>{{ transaction.response_description }}</td>
+                <td>
+                    &nbsp;
+                </td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td colspan="6">No hay registros</td>
+        </tr>
+    {% endif %}
+    </tbody>
+</table>

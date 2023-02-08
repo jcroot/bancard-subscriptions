@@ -62,10 +62,16 @@ def profile(request):
             messages.error(request, "Usuario no existe o es admin")
             return redirect(reverse('index'))
 
+    transactions = Transaction.objects.filter(order__profile=customer.first())
+    transaction_data = None
+    if transactions:
+        transaction_data = transactions.all()
+
     context = {
         'cards': cards,
         'customer': customer,
-        'orders': customer.get().orders_set.all()
+        'orders': customer.get().orders_set.all(),
+        'transactions': transaction_data
     }
 
     return render(request, 'pages/customer/profile.html', context)
