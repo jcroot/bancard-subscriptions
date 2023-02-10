@@ -96,6 +96,18 @@ def delete_card(request, card_id):
         return redirect(reverse('profile'))
 
 
+def rollback(request, transaction_id):
+    transaction_data = Transaction.objects.get(pk=transaction_id)
+    if transaction_data:
+        response = BancardAPI().rollback(transaction_id)
+        response_json = response.json()
+        if response_json['status'] == 'success':
+            messages.success(request, "Rollback exitoso.", extra_tags="success")
+        else:
+            messages.error(request, response_json['messages'][0]['dsc'])
+
+    return redirect(reverse('profile'))
+
 def login(request):
     if request.method == 'POST':
         username = request.POST['emailAddress']

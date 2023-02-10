@@ -49,7 +49,9 @@
                 <td>{{ transaction.amount }}</td>
                 <td>{{ transaction.response_description }}</td>
                 <td>
-                    &nbsp;
+                    {% if transaction.response_description  %}
+                    &nbsp;<a href="{% url 'rollback' transaction.id %}" class="btn btn-danger btn-sm">Reversar</a>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}
