@@ -36,8 +36,8 @@ def profile(request):
                                                        alias_token=new_transaction.card.alias_token,
                                                        number_of_payments=new_transaction.number_of_payments)
 
-                        if response:
-                            response_json = response.json()
+                        response_json = response.json()
+                        if response.status_code == 200:
                             if response_json['status'] == 'success':
                                 if new_transaction.id == response_json['confirmation']['shop_process_id']:
                                     new_transaction.response = response_json['confirmation']['response']
@@ -50,7 +50,14 @@ def profile(request):
                                         'response_description']
                                     new_transaction.security_information = response_json['confirmation'][
                                         'security_information']
+
                                     new_transaction.save()
+
+                        else:
+                            new_transaction.response_description = response_json['messages'][0]['dsc']
+                            messages.error(request, "Ocurrio un error. La tarjeta no existe o faltaria actualizar el token")
+
+                        new_transaction.save()
 
     cards = CustomerCards.objects.filter(customer__user=request.user).all()
     with transaction.atomic():
