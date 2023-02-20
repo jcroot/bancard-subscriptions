@@ -16,12 +16,12 @@ class TransactionManager(models.Manager):
                 order.product_plan.plan.fee_amount)
             number_of_payments = order.product_plan.plan.installments if card.card_type == 'credit' else 1
 
-            order = super().create(amount=amount, currency=currency, number_of_payments=number_of_payments, card=card,
+            new_transaction = super().create(amount=amount, currency=currency, number_of_payments=number_of_payments, card=card,
                                    order=order)
         except CustomerCards.DoesNotExist:
-            order = None
+            new_transaction = None
 
-        return order
+        return new_transaction
 
     def update_transaction(self, **kwargs):
         pass

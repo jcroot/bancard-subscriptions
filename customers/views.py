@@ -95,6 +95,7 @@ def delete_card(request, card_id):
             response_json = response.json()
             if response_json['status'] == 'success':
                 card.alias_token = None
+                card.is_default = False
                 card.save()
                 messages.success(request, "Tarjeta eliminada.", extra_tags="success")
             else:
