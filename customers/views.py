@@ -59,20 +59,22 @@ def profile(request):
 
                         new_transaction.save()
 
-    cards = CustomerCards.objects.filter(customer__user=request.user).all()
-    with transaction.atomic():
-        for card in cards:
-            card.update_alias_token()
+    cards = CustomerCards.objects.filter(customer__user=request.user)
+    if cards:
+        with transaction.atomic():
+            for card in cards.all():
+                card.update_alias_token()
 
-        customer = Profile.objects.filter(user_id=request.user.id)
-        if not customer:
-            messages.error(request, "Usuario no existe o es admin")
-            return redirect(reverse('index'))
+    customer = Profile.objects.filter(user_id=request.user.id)
+    if customer:
+        transactions = Transaction.objects.filter(order__profile=customer.first())
+        transaction_data = None
+        if transactions:
+            transaction_data = transactions.all()
 
-    transactions = Transaction.objects.filter(order__profile=customer.first())
-    transaction_data = None
-    if transactions:
-        transaction_data = transactions.all()
+    else:
+        messages.error(request, "Usuario no existe o es admin")
+        return redirect(reverse('index'))
 
     context = {
         'cards': cards,
@@ -86,19 +88,19 @@ def profile(request):
 
 def delete_card(request, card_id):
     if request.method == 'GET':
-        card = CustomerCards.objects.get(pk=card_id)
-        transactions = Transaction.objects.filter(card=card)
-        if not transactions.exists():
-            if card:
-                response = BancardAPI().remove_card(user_id=card.customer_id, alias_token=card.alias_token)
-                response_json = response.json()
-                if response_json['status'] == 'success':
-                    card.delete()
-                    messages.success(request, "Tarjeta eliminada.", extra_tags="success")
-                else:
-                    messages.error(request, "La tarjeta no existe o hubo un error al eliminar.", extra_tags="danger")
-        else:
-            messages.error(request, "No se puede eliminar esta tarjeta por que tiene transacciones asociadas.")
+        try:
+            card = CustomerCards.objects.get(pk=card_id)
+            # eliminate from Bancard first, and remove default to use this card
+            response = BancardAPI().remove_card(user_id=card.customer_id, alias_token=card.alias_token)
+            response_json = response.json()
+            if response_json['status'] == 'success':
+                card.alias_token = None
+                card.save()
+                messages.success(request, "Tarjeta eliminada.", extra_tags="success")
+            else:
+                messages.error(request, response_json['status'])
+        except CustomerCards.DoesNotExist:
+            card = None
 
         return redirect(reverse('profile'))
 

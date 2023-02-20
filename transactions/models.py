@@ -10,12 +10,17 @@ from customers.models import Profile, CustomerCards
 class TransactionManager(models.Manager):
     def create_transaction(self, order: Orders):
         currency = 'PY'
+        try:
+            card = order.profile.customercards_set.get(is_default=True)
+            amount = int(order.product_plan.plan.price) if card.card_type == 'credit' else int(
+                order.product_plan.plan.fee_amount)
+            number_of_payments = order.product_plan.plan.installments if card.card_type == 'credit' else 1
 
-        card = order.profile.customercards_set.get(is_default=True)
-        amount = int(order.product_plan.plan.price) if card.card_type == 'credit' else int(order.product_plan.plan.fee_amount)
-        number_of_payments = order.product_plan.plan.installments if card.card_type == 'credit' else 1
+            order = super().create(amount=amount, currency=currency, number_of_payments=number_of_payments, card=card,
+                                   order=order)
+        except CustomerCards.DoesNotExist:
+            order = None
 
-        order = super().create(amount=amount, currency=currency, number_of_payments=number_of_payments, card=card, order=order)
         return order
 
     def update_transaction(self, **kwargs):

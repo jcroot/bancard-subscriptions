@@ -139,15 +139,20 @@ class CustomerCards(models.Model):
             if response_json['status'] == 'success':
                 if len(response_json['cards']) > 0:
                     for card in response_json['cards']:
-                        card_customer = CustomerCards.objects.get(pk=card['card_id'])
-                        if card_customer:
-                            card_customer.alias_token = card['alias_token']
-                            card_customer.card_masked_number = card['card_masked_number']
-                            card_customer.expiration_date = card['expiration_date']
-                            card_customer.card_brand = card['card_brand']
-                            card_customer.card_type = card['card_type']
-                            card_customer.save(update_fields=['alias_token', 'card_masked_number',
-                                                              'expiration_date', 'card_brand', 'card_type'])
+                        try:
+                            card_customer = CustomerCards.objects.get(pk=card['card_id'])
+                            if card_customer.alias_token:
+                                card_customer.alias_token = card['alias_token']
+                                card_customer.card_masked_number = card['card_masked_number']
+                                card_customer.expiration_date = card['expiration_date']
+                                card_customer.card_brand = card['card_brand']
+                                card_customer.card_type = card['card_type']
+                                card_customer.save(update_fields=['alias_token', 'card_masked_number',
+                                                                  'expiration_date', 'card_brand', 'card_type'])
+
+                        except CustomerCards.DoesNotExist:
+                                card_customer = None
+
                 else:
                     from transactions.models import Transaction
                     transactions = Transaction.objects.filter(card_id=self.id)
