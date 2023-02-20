@@ -154,10 +154,9 @@ class CustomerCards(models.Model):
                                 card_customer = None
 
                 else:
-                    from transactions.models import Transaction
-                    transactions = Transaction.objects.filter(card_id=self.id)
-                    if not transactions.exists():
-                        self.delete()
+                    self.alias_token = None
+                    self.is_default = False
+                    self.save(update_fields=['alias_token', 'is_default'])
 
 
 class CartManager(models.Manager):
