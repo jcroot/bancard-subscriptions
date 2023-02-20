@@ -126,6 +126,7 @@ class CustomerCards(models.Model):
     card_brand = models.CharField(max_length=100, null=True, blank=True)
     is_default = models.BooleanField(default=False)
     card_type = models.CharField(max_length=20, null=True, blank=True)
+    card_is_deleted = models.BooleanField(default=False)
 
     customer = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
 
@@ -141,7 +142,7 @@ class CustomerCards(models.Model):
                     for card in response_json['cards']:
                         try:
                             card_customer = CustomerCards.objects.get(pk=card['card_id'])
-                            if card_customer.alias_token:
+                            if not card_customer.card_is_deleted:
                                 card_customer.alias_token = card['alias_token']
                                 card_customer.card_masked_number = card['card_masked_number']
                                 card_customer.expiration_date = card['expiration_date']
@@ -156,6 +157,7 @@ class CustomerCards(models.Model):
                 else:
                     self.alias_token = None
                     self.is_default = False
+                    self.card_is_deleted = True
                     self.save(update_fields=['alias_token', 'is_default'])
 
 

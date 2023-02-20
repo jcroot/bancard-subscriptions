@@ -43,15 +43,20 @@
     {% if cards %}
         {% for card in cards %}
             <tr>
-                <td><input type="checkbox" class="checkbox"
+                <td>{% if not card.card_is_deleted %}
+                    <input type="checkbox" class="checkbox"
                            id="checkbox-{{ card.id }}" name="checkbox[{{ card.id }}]"
-                           value="{{ card.is_default }}" onclick="setValue({{ card.id }})" {% if card.is_default %} checked {% endif %}></td>
-                <td>{{ card.card_masked_number }}</td>
-                <td>{{ card.card_type }}</td>
-                <td>{{ card.expiration_date }}</td>
-                <td>{{ card.card_brand }}</td>
+                           value="{{ card.is_default }}" onclick="setValue({{ card.id }})" {% if card.is_default %} checked {% endif %}>
+                    {% endif %}
+                </td>
+                <td {% if card.card_is_deleted %}class="text-decoration-line-through"{% endif %}>{{ card.card_masked_number }}</td>
+                <td {% if card.card_is_deleted %}class="text-decoration-line-through"{% endif %}>{{ card.card_type }}</td>
+                <td {% if card.card_is_deleted %}class="text-decoration-line-through"{% endif %}>{{ card.expiration_date }}</td>
+                <td {% if card.card_is_deleted %}class="text-decoration-line-through"{% endif %}>{{ card.card_brand }}</td>
                 <td>
-                    <a href="{% url 'delete_card' card.id %}" class="btn btn-danger btn-sm">Borrar</a>
+                    {% if not card.card_is_deleted %}
+                        <a href="{% url 'delete_card' card.id %}" class="btn btn-danger btn-sm">Borrar</a>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}

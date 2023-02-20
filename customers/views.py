@@ -91,15 +91,17 @@ def delete_card(request, card_id):
         try:
             card = CustomerCards.objects.get(pk=card_id)
             # eliminate from Bancard first, and remove default to use this card
-            response = BancardAPI().remove_card(user_id=card.customer_id, alias_token=card.alias_token)
-            response_json = response.json()
-            if response_json['status'] == 'success':
-                card.alias_token = None
-                card.is_default = False
-                card.save()
-                messages.success(request, "Tarjeta eliminada.", extra_tags="success")
-            else:
-                messages.error(request, response_json['status'])
+            if card.alias_token:
+                response = BancardAPI().remove_card(user_id=card.customer_id, alias_token=card.alias_token)
+                response_json = response.json()
+                if response_json['status'] == 'success':
+                    card.alias_token = None
+                    card.is_default = False
+                    card.card_is_deleted = True
+                    card.save()
+                    messages.success(request, "Tarjeta eliminada.", extra_tags="success")
+                else:
+                    messages.error(request, response_json['status'])
         except CustomerCards.DoesNotExist:
             card = None
 
