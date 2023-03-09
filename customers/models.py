@@ -131,7 +131,7 @@ class CustomerCards(models.Model):
     customer = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
 
     def __str__(self):
-        return f'{self.customer.first_name} {self.customer.last_name} - {self.card_masked_number} - {self.expiration_date}'
+        return f'{self.customer.first_name} {self.customer.last_name} - {self.card_masked_number} - {self.expiration_date} {self.is_default}'
 
     def update_alias_token(self):
         response = BancardAPI().users_cards(self.customer_id)
@@ -139,20 +139,26 @@ class CustomerCards(models.Model):
             response_json = response.json()
             if response_json['status'] == 'success':
                 if len(response_json['cards']) > 0:
+                    
                     for card in response_json['cards']:
                         try:
-                            card_customer = CustomerCards.objects.get(pk=card['card_id'])
-                            if not card_customer.card_is_deleted:
-                                card_customer.alias_token = card['alias_token']
-                                card_customer.card_masked_number = card['card_masked_number']
-                                card_customer.expiration_date = card['expiration_date']
-                                card_customer.card_brand = card['card_brand']
-                                card_customer.card_type = card['card_type']
-                                card_customer.save(update_fields=['alias_token', 'card_masked_number',
-                                                                  'expiration_date', 'card_brand', 'card_type'])
-
+                            card_customer = CustomerCards.objects.filter(pk=card['card_id'],card_is_deleted=False).first()
+                            card_customer.alias_token = card['alias_token']
+                            card_customer.card_masked_number = card['card_masked_number']
+                            card_customer.expiration_date = card['expiration_date']
+                            card_customer.card_brand = card['card_brand']
+                            card_customer.card_type = card['card_type']                                
+                            #card_customer.is_default = True
+                            card_customer.save(update_fields=['alias_token', 'card_masked_number',
+                                                                'expiration_date', 'card_brand', 'card_type'])
                         except CustomerCards.DoesNotExist:
                                 card_customer = None
+                    qty_card_customer = CustomerCards.objects.filter(customer_id=self.customer_id)
+                    
+                    if qty_card_customer.count()==1:
+                        item=qty_card_customer.first()
+                        item.is_default = True
+                        item.save(update_fields=['is_default'])
 
                 else:
                     self.alias_token = None

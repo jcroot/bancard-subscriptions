@@ -40,7 +40,7 @@ class Transaction(TimeStampMixin):
     iva_amount = models.DecimalField(decimal_places=2, default=0, max_digits=10)
     iva_ticket_number = models.CharField(max_length=50, blank=True, null=True)
     response_code = models.CharField(max_length=50, blank=True, null=True)
-    response_description = models.CharField(max_length=50, null=True, blank=True)
+    response_description = models.CharField(max_length=255, null=True, blank=True)
     security_information = models.CharField(max_length=255, null=True, blank=True)
 
     order = models.ForeignKey(Orders, on_delete=models.DO_NOTHING)

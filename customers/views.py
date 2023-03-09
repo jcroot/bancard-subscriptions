@@ -1,6 +1,6 @@
 from django.contrib import messages, auth
 from django.db import transaction
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
@@ -146,3 +146,19 @@ def logout(request):
     auth.logout(request)
     messages.success(request, 'Your are now logged out')
     return redirect('index')
+
+def set_as_Default(request):
+    if request.method == 'POST':
+        try:
+            value_of_action=int(request.POST['selector'])
+            if value_of_action== 1:
+                customer_card = get_object_or_404(CustomerCards, pk=request.POST['card_selected_id'])
+                customer_card.is_default=True
+                customer_card.save()
+                messages.success(request, 'Set as default successfuly!!!')
+
+
+        except CustomerCards.DoesNotExist:
+            card = None
+
+        return redirect(reverse('profile'))
