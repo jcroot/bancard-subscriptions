@@ -89,7 +89,7 @@ def card_return_url(request, card_id):
             customer_card = get_object_or_404(CustomerCards, pk=card_id)
 
             if customer_card:
-                customer_card.update_alias_token()
+                customer_card.update_alias_token(customer_card.customer.id)
 
                 context.update({
                     'status': 'success',

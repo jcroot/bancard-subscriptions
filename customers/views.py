@@ -59,11 +59,13 @@ def profile(request):
 
                         new_transaction.save()
 
+    customer = Profile.objects.filter(user_id=request.user.id)
+
+    CustomerCards.update_alias_token(customer.id)
+
+    # CustomerCards.update_cards_with_default(customer.id, True, None)
+
     cards = CustomerCards.objects.filter(customer__user=request.user)
-    if cards:
-        with transaction.atomic():
-            for card in cards.all():
-                card.update_alias_token()
 
     customer = Profile.objects.filter(user_id=request.user.id)
     if customer:

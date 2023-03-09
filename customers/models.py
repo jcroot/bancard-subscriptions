@@ -133,8 +133,8 @@ class CustomerCards(models.Model):
     def __str__(self):
         return f'{self.customer.first_name} {self.customer.last_name} - {self.card_masked_number} - {self.expiration_date}'
 
-    def update_alias_token(self):
-        response = BancardAPI().users_cards(self.customer_id)
+    def update_alias_token(self, customer_id):
+        response = BancardAPI().users_cards(customer_id)
         if response:
             response_json = response.json()
             if response_json['status'] == 'success':
@@ -160,6 +160,13 @@ class CustomerCards(models.Model):
                     self.card_is_deleted = True
                     self.save(update_fields=['alias_token', 'is_default'])
 
+
+    def update_cards_with_default(self, customer_id, is_default, card_id):
+        if card_id:
+            card = CustomerCards.objects.get(card_id=card_id)
+            card.is_default = is_default
+        else:
+            CustomerCards.objects.filter(customer_id=customer_id).update(is_default=is_default)
 
 class CartManager(models.Manager):
     def create_cart(self, product_plan):
