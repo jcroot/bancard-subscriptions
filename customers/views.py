@@ -1,6 +1,7 @@
 from django.contrib import messages, auth
 from django.db import transaction
-from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
@@ -107,6 +108,28 @@ def delete_card(request, card_id):
 
         return redirect(reverse('profile'))
 
+def default_card(request):
+    if request.method == 'POST':
+        # first check is card exists
+        card_id = request.POST.get('card_id')
+        card_data = get_object_or_404(CustomerCards, pk=card_id)
+        if card_data:
+            # second update all cards with is_default = False
+            update_cards_default_false(request.user)
+            card_data.is_default = True
+            # update this card with default = True
+            card_data.save(update_fields=['is_default'])
+
+            return JsonResponse({'status': 'success', 'card_id': card_id})
+
+        return JsonResponse({'status': 'error'})
+
+    return redirect(reverse('profile'))
+
+def update_cards_default_false(user):
+    cards = CustomerCards.objects.filter(customer__user=user)
+    if cards:
+        cards.update(is_default=False)
 
 def rollback(request, transaction_id):
     transaction_data = Transaction.objects.get(pk=transaction_id)

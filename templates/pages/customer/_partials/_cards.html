@@ -1,30 +1,32 @@
-<div class="mt-2 py-2">
-    <form id="myform" action="{% url 'profile' %}" method="post">
-
-        {% csrf_token %}
-
-        <div class="row">
-            <label class="col-2 col-form-label text-end">Action</label>
-            <div class="col-4">
-                <select class="form-select" name="selector">
-                    <option value="0" selected>--------</option>
-                    <option value="1">Select by default</option>
-                    <option value="2">Add new credit / debit card</option>
-                </select>
-            </div>
-            <input type="hidden" value="" name="card_select_id" id="card_select_id">
-            <div class="col-6">
-                <button type="submit" class="btn btn-outline-primary">Go</button>
-            </div>
-        </div>
-    </form>
-</div>
-
 <script>
+    $(document).ready(function () {
+        $('.checkbox').on('click', function () {
+            if ($(this).is(':checked')) {
+                $.ajax({
+                    url: '{% url 'default_card' %}',
+                    method: 'POST',
+                    headers: {'X-CSRFToken': '{{ csrf_token }}'},
+                    data: {
+                        card_id: this.value
+                    },
+                    dataType: 'json'
+                }).done(function (response) {
+                    resetCheckbox(response.card_id);
+                })
+                    .fail(function (xhr, error) {
+                        console.log(error);
+                    });
+            }
+        });
+    });
 
-    const setValue = card_id => {
-        document.getElementById('card_select_id').value = card_id
-    }
+    const resetCheckbox = (id) => {
+        $('.checkbox').each(function(evt){
+            if (this.value !== id){
+                this.checked = false;
+            }
+        });
+    };
 
 </script>
 
@@ -46,8 +48,8 @@
                 <td>{% if not card.card_is_deleted %}
                     <input type="checkbox" class="checkbox"
                            id="checkbox-{{ card.id }}" name="checkbox[{{ card.id }}]"
-                           value="{{ card.is_default }}" onclick="setValue({{ card.id }})" {% if card.is_default %} checked {% endif %}>
-                    {% endif %}
+                           value="{{ card.id }}" {% if card.is_default %} checked {% endif %}>
+                {% endif %}
                 </td>
                 <td {% if card.card_is_deleted %}class="text-decoration-line-through"{% endif %}>{{ card.card_masked_number }}</td>
                 <td {% if card.card_is_deleted %}class="text-decoration-line-through"{% endif %}>{{ card.card_type }}</td>
