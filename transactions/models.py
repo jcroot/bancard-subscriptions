@@ -1,5 +1,6 @@
 from django.db import models
 
+from core import settings
 from customers.models import Orders
 from products.models import PlanProducts
 from util.django_ext.models import TimeStampMixin
@@ -14,7 +15,8 @@ class TransactionManager(models.Manager):
             card = order.profile.customercards_set.get(is_default=True)
             amount = int(order.product_plan.plan.price) if card.card_type == 'credit' else int(
                 order.product_plan.plan.fee_amount)
-            number_of_payments = order.product_plan.plan.installments if card.card_type == 'credit' else 1
+
+            number_of_payments = order.product_plan.plan.installments if card.card_type == 'credit' and settings.USE_INSTALLMENTS else 1
 
             new_transaction = super().create(amount=amount, currency=currency, number_of_payments=number_of_payments, card=card,
                                    order=order)

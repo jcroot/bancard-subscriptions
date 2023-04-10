@@ -159,3 +159,6 @@ MESSAGE_TAGS = {
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+USE_INSTALLMENTS = env('USE_INSTALLMENTS')
+
