@@ -16,7 +16,7 @@ class TransactionManager(models.Manager):
             amount = int(order.product_plan.plan.price) if card.card_type == 'credit' else int(
                 order.product_plan.plan.fee_amount)
 
-            number_of_payments = order.product_plan.plan.installments if card.card_type == 'credit' and settings.USE_INSTALLMENTS else 1
+            number_of_payments = 1 # order.product_plan.plan.installments if card.card_type == 'credit' and settings.USE_INSTALLMENTS else 1
 
             new_transaction = super().create(amount=amount, currency=currency, number_of_payments=number_of_payments, card=card,
                                    order=order)
