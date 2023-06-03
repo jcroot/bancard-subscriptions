@@ -56,7 +56,8 @@ def profile(request):
 
                         else:
                             new_transaction.response_description = response_json['messages'][0]['dsc']
-                            messages.error(request, "Ocurrio un error. La tarjeta no existe o faltaria actualizar el token")
+                            messages.error(request,
+                                           "Ocurrio un error. La tarjeta no existe o faltaria actualizar el token")
 
                         new_transaction.save()
 
@@ -108,6 +109,7 @@ def delete_card(request, card_id):
 
         return redirect(reverse('profile'))
 
+
 def default_card(request):
     if request.method == 'POST':
         # first check is card exists
@@ -126,10 +128,12 @@ def default_card(request):
 
     return redirect(reverse('profile'))
 
+
 def update_cards_default_false(user):
     cards = CustomerCards.objects.filter(customer__user=user)
     if cards:
         cards.update(is_default=False)
+
 
 def rollback(request, transaction_id):
     transaction_data = Transaction.objects.get(pk=transaction_id)
@@ -142,6 +146,7 @@ def rollback(request, transaction_id):
             messages.error(request, response_json['messages'][0]['dsc'])
 
     return redirect(reverse('profile'))
+
 
 def login(request):
     if request.method == 'POST':

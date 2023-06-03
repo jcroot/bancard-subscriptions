@@ -9,6 +9,7 @@ from rest_framework.response import Response
 # Create your views here.
 class TransactionViewSet(viewsets.ViewSet):
     permission_classes = [permissions.AllowAny]
+
     def list(self, request):
         queryset = Transaction.objects.all()
         serializer = TransactionSerializer(queryset)
@@ -23,7 +24,7 @@ class TransactionViewSet(viewsets.ViewSet):
     def create(self, request):
         data = {
             "status": "success",
-            "message": "Create row uccessfully"
+            "message": "Create row successfully"
         }
         return Response(data=data)
 
