@@ -4,8 +4,11 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from rest_framework import viewsets, permissions
+from rest_framework.response import Response
 
 from customers.models import CustomerCards, Profile, Orders
+from customers.serializers import CustomerSerializer
 from data_providers.bancard.request import BancardAPI
 from transactions.models import Transaction
 
@@ -174,3 +177,13 @@ def logout(request):
     auth.logout(request)
     messages.success(request, 'Your are now logged out')
     return redirect('index')
+
+
+class CustomerViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.AllowAny]
+    serializer_class = CustomerSerializer
+
+    def get_queryset(self):
+        queryset = Profile.objects.all()
+        return queryset
+

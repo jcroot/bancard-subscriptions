@@ -7,30 +7,9 @@ from rest_framework.response import Response
 
 
 # Create your views here.
-class TransactionViewSet(viewsets.ViewSet):
+class TransactionViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
+    serializer_class = TransactionSerializer
 
-    def list(self, request):
-        queryset = Transaction.objects.all()
-        serializer = TransactionSerializer(queryset)
-        return Response(serializer.data)
-
-    def retrieve(self, request, pk=None):
-        queryset = Transaction.objects.all()
-        transaction = get_object_or_404(queryset, pk=pk)
-        serializer = TransactionSerializer(transaction)
-        return Response(serializer.data)
-
-    def create(self, request):
-        data = {
-            "status": "success",
-            "message": "Create row successfully"
-        }
-        return Response(data=data)
-
-    def update(self, request, pk=None):
-        data = {
-            "status": "success",
-            "message": "Update row successfully"
-        }
-        return Response(data=data)
+    def get_queryset(self):
+        return Transaction.objects.all()
