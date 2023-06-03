@@ -17,16 +17,16 @@ services:
     volumes:
       - /tmp/app/mysqld:/var/run/mysqld
       - my-db:/var/lib/mysql
-#  web:
-#    build: .
-#    command: python manage.py runserver 0.0.0.0:8000
-#    ports:
-#      - "8000:8000"
-#    volumes:
-#      - .:/app
-#      - /tmp/app/mysqld:/run/mysqld
-#    depends_on:
-#      - db-subscriptions
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+      - /tmp/app/mysqld:/run/mysqld
+    depends_on:
+      - db-subscriptions
 volumes:
   my-db:
     driver: local
