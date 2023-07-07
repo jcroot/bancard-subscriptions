@@ -16,6 +16,7 @@ class ProfileForm(forms.ModelForm):
             'city_name',
             'phone',
             'email_address',
+            'is_api_user'
         ]
 
 
@@ -26,6 +27,7 @@ class ProfileAdmin(admin.ModelAdmin):
     search_fields = ('id', 'first_name', 'last_name', 'phone', 'email_address')
     list_per_page = 25
     form = ProfileForm
+
 
 class OrderAdmin(admin.ModelAdmin):
     list_display = ('id', 'profile', 'product_plan', 'order_code')

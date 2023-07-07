@@ -4,10 +4,12 @@ from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import PermissionsMixin, AbstractUser, User
 from django.db import models
 from django.utils.translation import gettext as _
+from rest_framework.authtoken.models import Token
 
 from core import settings
 from products.models import PlanProducts
 from data_providers.bancard.request import BancardAPI
+from util.django_ext.models import ModelDiffMixin
 
 
 # Create your models here.
@@ -49,7 +51,7 @@ class UserProfile(AbstractUser):
     REQUIRED_FIELDS = []
 
 
-class Profile(models.Model):
+class Profile(ModelDiffMixin, models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     company_name = models.CharField(max_length=100, null=True, blank=True)
@@ -57,6 +59,8 @@ class Profile(models.Model):
     city_name = models.CharField(max_length=100)
     phone = models.CharField(max_length=50)
     email_address = models.CharField(max_length=100)
+
+    is_api_user = models.BooleanField(default=False)
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
 
@@ -79,6 +83,15 @@ class Profile(models.Model):
 
                     if card_customer:
                         card_customer.alias_token = card['alias_token']
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        if 'is_api_user' in self.changed_fields:
+            if self.is_api_user:
+                Token.objects.create(user=self.user)
+            else:
+                Token.objects.filter(user=self.user).delete()
+
+        super().save(force_insert, force_update, using, update_fields)
 
 
 class OrderManager(models.Manager):

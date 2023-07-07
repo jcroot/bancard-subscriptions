@@ -70,9 +70,9 @@ def profile(request):
             for card in cards.all():
                 card.update_alias_token()
 
-    customer = Profile.objects.filter(user_id=request.user.id)
+    customer = Profile.objects.filter(user_id=request.user.id).first()
     if customer:
-        transactions = Transaction.objects.filter(order__profile=customer.first())
+        transactions = Transaction.objects.filter(order__profile=customer)
         transaction_data = None
         if transactions:
             transaction_data = transactions.all()
@@ -83,8 +83,8 @@ def profile(request):
 
     context = {
         'cards': cards,
-        'customer': customer.first(),
-        'orders': customer.get().orders_set.all(),
+        'customer': customer,
+        'orders': customer.orders_set.all() if customer else [],
         'transactions': transaction_data
     }
 
