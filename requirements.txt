@@ -21,6 +21,7 @@ jedi==0.18.2
 Markdown==3.4.1
 MarkupSafe==2.1.1
 matplotlib-inline==0.1.6
+mysqlclient==2.2.0
 parso==0.8.3
 pexpect==4.8.0
 pickleshare==0.7.5
