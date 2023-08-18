@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from customers.models import CustomerCards, Profile, Orders
-from customers.serializers import CustomerSerializer
+from customers.serializers import CustomerSerializer, CardSerializer
 from data_providers.bancard.request import BancardAPI
 from transactions.models import Transaction
 
@@ -196,3 +196,13 @@ class CustomerViewSet(viewsets.ModelViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CardNewViewSet(viewsets.ModelViewSet):
+    serializer_class = CardSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = CustomerCards.objects.all()
+        return queryset
