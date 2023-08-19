@@ -206,3 +206,13 @@ class CardNewViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = CustomerCards.objects.all()
         return queryset
+
+    def create(self, request, *args, **kwargs):
+        if 'customer_id' in request.data:
+            serializer = self.get_serializer(data=request.data)
+            if serializer.is_valid():
+                process_id = serializer.create_new_card()
+                return Response({
+                    'process_id': process_id
+                }, status=status.HTTP_201_CREATED)
+            return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
