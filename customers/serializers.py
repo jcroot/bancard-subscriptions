@@ -5,10 +5,23 @@ from .models import Profile, CustomerCards
 
 
 class CustomerSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField(max_length=100)
+    last_name = serializers.CharField(max_length=100)
+    company_name = serializers.CharField(max_length=100, allow_blank=True)
+    street_address = serializers.CharField(max_length=255)
+    city_name = serializers.CharField(max_length=100)
+    phone = serializers.CharField(max_length=50)
+    email_address = serializers.EmailField(max_length=100)
+
     class Meta:
         model = Profile
-        fields = ('id', 'first_name', 'last_name', 'company_name', 'street_address',
-                  'city_name', 'phone', 'email_address', 'user')
+        fields = ('id', 'first_name', 'last_name', 'street_address',
+                  'city_name', 'phone', 'email_address', 'company_name')
+
+    def validate_email_address(self, email_address):
+        if Profile.objects.filter(email_address=email_address).exists():
+            raise serializers.ValidationError('Email already exists', code='email_exists')
+        return email_address
 
 
 class CardSerializer(serializers.ModelSerializer):
