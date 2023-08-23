@@ -12,11 +12,12 @@ class CustomerSerializer(serializers.ModelSerializer):
     city_name = serializers.CharField(max_length=100)
     phone = serializers.CharField(max_length=50)
     email_address = serializers.EmailField(max_length=100)
+    user_id = serializers.IntegerField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = Profile
         fields = ('id', 'first_name', 'last_name', 'street_address',
-                  'city_name', 'phone', 'email_address', 'company_name')
+                  'city_name', 'phone', 'email_address', 'company_name', 'user_id')
 
     def validate_email_address(self, email_address):
         if Profile.objects.filter(email_address=email_address).exists():

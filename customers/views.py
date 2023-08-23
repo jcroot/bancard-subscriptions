@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets, permissions, status
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
@@ -191,6 +192,9 @@ class CustomerViewSet(viewsets.ModelViewSet):
         return queryset
 
     def create(self, request, *args, **kwargs):
+        token = Token.objects.get(user=request.user)
+        request.data.update({'user_id': token.user_id})
+
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
