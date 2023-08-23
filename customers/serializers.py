@@ -33,19 +33,22 @@ class CardSerializer(serializers.ModelSerializer):
         fields = ('id', 'customer_id')
 
     def create_new_card(self):
-        customer = Profile.objects.get(pk=self.validated_data['customer_id'])
-        customer_card = CustomerCards.objects.create(customer=customer)
+        try:
+            customer = Profile.objects.get(pk=self.validated_data['customer_id'])
+            customer_card = CustomerCards.objects.create(customer=customer)
 
-        response = BancardAPI().cards_new(
-            card_id=customer_card.id,
-            user_id=customer.id,
-            phone_number=customer.phone,
-            email_addr=customer.email_address
-        )
+            response = BancardAPI().cards_new(
+                card_id=customer_card.id,
+                user_id=customer.id,
+                phone_number=customer.phone,
+                email_addr=customer.email_address
+            )
 
-        if response:
-            response_json = response.json()
-            process_id = response_json['process_id']
-            return process_id
-        else:
-            raise serializers.ValidationError('Error creating card')
+            if response:
+                response_json = response.json()
+                process_id = response_json['process_id']
+                return process_id
+            else:
+                raise serializers.ValidationError('Error creating card')
+        except Profile.DoesNotExist:
+            raise serializers.ValidationError('Customer does not exist')
