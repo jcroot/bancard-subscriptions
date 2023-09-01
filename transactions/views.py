@@ -15,3 +15,6 @@ class TransactionViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Transaction.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        pass
