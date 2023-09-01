@@ -5,19 +5,18 @@ from .models import Profile, CustomerCards
 
 
 class CustomerSerializer(serializers.ModelSerializer):
-    first_name = serializers.CharField(max_length=100)
-    last_name = serializers.CharField(max_length=100)
-    company_name = serializers.CharField(max_length=100, allow_blank=True)
-    street_address = serializers.CharField(max_length=255)
-    city_name = serializers.CharField(max_length=100)
-    phone = serializers.CharField(max_length=50)
-    email_address = serializers.EmailField(max_length=100)
+    first_name = serializers.CharField(max_length=100, allow_blank=True, allow_null=True)
+    last_name = serializers.CharField(max_length=100, allow_null=True, allow_blank=True)
+    company_name = serializers.CharField(max_length=100, allow_blank=True, allow_null=True)
+    street_address = serializers.CharField(max_length=255, allow_blank=True, allow_null=True)
+    city_name = serializers.CharField(max_length=100, allow_null=True, allow_blank=True)
+    phone = serializers.CharField(max_length=50, allow_blank=True, allow_null=True)
+    email_address = serializers.EmailField(max_length=100, allow_null=True, allow_blank=True)
     user_id = serializers.IntegerField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = Profile
-        fields = ('id', 'first_name', 'last_name', 'street_address',
-                  'city_name', 'phone', 'email_address', 'company_name', 'user_id')
+        fields = '__all__'
 
     def validate_email_address(self, email_address):
         if Profile.objects.filter(email_address=email_address).exists():
