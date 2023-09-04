@@ -36,12 +36,17 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    category = CategorySerializer(read_only=True,)
+
     class Meta:
         model = Product
         fields = '__all__'
 
 
 class PlanProductSerializer(serializers.ModelSerializer):
+    product = ProductSerializer(read_only=True,)
+    plan = PlanSerializer(read_only=True,)
+
     class Meta:
         model = PlanProducts
         fields = '__all__'

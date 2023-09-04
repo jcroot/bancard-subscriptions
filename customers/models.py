@@ -118,7 +118,7 @@ class Orders(models.Model):
         verbose_name = _('Order')
         verbose_name_plural = _('Orders')
 
-    profile = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
+    profile = models.ForeignKey(Profile, on_delete=models.DO_NOTHING, related_name='profile')
     product_plan = models.ForeignKey(PlanProducts, related_name="product_plan", on_delete=models.DO_NOTHING)
     order_code = models.CharField(max_length=50)
 

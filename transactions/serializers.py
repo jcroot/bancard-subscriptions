@@ -1,7 +1,9 @@
 from rest_framework import serializers
 
 from customers.models import CustomerCards, Orders, Profile
+from customers.serializers import CustomerSerializer
 from products.models import PlanProducts
+from products.serializers import PlanProductSerializer
 from .models import Transaction
 
 
@@ -56,3 +58,12 @@ class OrderSerializer(serializers.ModelSerializer):
         if not PlanProducts.objects.filter(id=product_plan_id).exists():
             raise serializers.ValidationError('Product plan does not exist')
         return self.product_plan_id
+
+
+class OrderListSerializer(serializers.ModelSerializer):
+    profile = CustomerSerializer(read_only=True, )
+    product_plan = PlanProductSerializer(read_only=True, )
+
+    class Meta:
+        model = Orders
+        fields = ['id', 'order_code', 'profile', 'product_plan']
