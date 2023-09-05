@@ -8,7 +8,7 @@ from transactions.views import TransactionViewSet, CheckoutViewSet, OrdersViewSe
 PREFIX = "api"
 
 router = routers.DefaultRouter()
-router.register(r'confirm', TransactionViewSet, 'transactions')
+router.register(r'charge', TransactionViewSet, 'charge')
 router.register(r'checkout', CheckoutViewSet, 'checkout')
 router.register(r'orders', OrdersViewSet, 'orders')
 router.register(r'profile', CustomerViewSet, 'profile')

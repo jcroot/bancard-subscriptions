@@ -31,6 +31,9 @@ class Product(models.Model):
 
     category = models.ForeignKey(Category, on_delete=models.DO_NOTHING)
 
+    class Meta:
+        db_table = 'products'
+
     def __str__(self):
         return self.title_product
 

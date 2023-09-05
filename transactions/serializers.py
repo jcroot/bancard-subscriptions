@@ -2,33 +2,44 @@ from rest_framework import serializers
 
 from customers.models import CustomerCards, Orders, Profile
 from customers.serializers import CustomerSerializer
+from data_providers.bancard.request import BancardAPI
 from products.models import PlanProducts
 from products.serializers import PlanProductSerializer
 from .models import Transaction
 
 
 class TransactionSerializer(serializers.ModelSerializer):
-    alias_token = serializers.CharField(max_length=255)
-    order = serializers.IntegerField()
+    order_code = serializers.CharField(max_length=20)
 
     class Meta:
         model = Transaction
-        fields = ('id', 'number_of_payments')
+        fields = ('order_code',)
 
-    def validate(self, attrs):
-        if 'number_of_payments' in attrs:
-            if attrs['number_of_payments'] < 1:
-                raise serializers.ValidationError('Number of payments must be greater than 0')
-
-    def validate_alias_token(self, alias_token):
-        if not CustomerCards.objects.filter(alias_token=alias_token).exists():
-            return serializers.ValidationError('Card does not exist')
-
-    def validate_order(self, order_id):
-        if not Orders.objects.filter(id=order_id).exists():
+    def validate_order_code(self, order_code):
+        self.order_code = order_code
+        if not Orders.objects.filter(order_code=order_code).exists():
             return serializers.ValidationError('Order does not exist')
 
-        return order_id
+        return order_code
+
+    def create_order(self):
+        order = Orders.objects.get(order_code=self.order_code)
+        try:
+            customer_card = CustomerCards.objects.get(customer_id=order.profile.id,
+                                                      customer__customercards__is_default=True)
+
+            response = BancardAPI().charge(shop_process_id=order.id,
+                                           amount=order.product_plan.price,
+                                           description=order.product_plan.plan.title_plan,
+                                           alias_token=customer_card.alias_token,
+                                           number_of_payments=order.product_plan.plan.number_of_payments)
+
+            response_json = response.json()
+
+        except CustomerCards.DoesNotExist:
+            raise serializers.ValidationError(
+                'Customer don\'t have a default card. First add a card and set it as default')
+        return order
 
 
 class OrderSerializer(serializers.ModelSerializer):

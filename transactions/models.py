@@ -52,5 +52,8 @@ class Transaction(TimeStampMixin):
 
     objects = TransactionManager()
 
+    class Meta:
+        db_table = 'transactions'
+
     def __str__(self):
         return f'{self.id} - {self.authorization_number}'

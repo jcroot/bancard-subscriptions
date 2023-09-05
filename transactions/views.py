@@ -20,7 +20,13 @@ class TransactionViewSet(viewsets.ModelViewSet):
         return Transaction.objects.all()
 
     def create(self, request, *args, **kwargs):
-        order_code = request.data.get('order_code')
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            order = serializer.create_order()
+            return Response({
+                'order_code': order.order_code,
+            }, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CheckoutViewSet(viewsets.ModelViewSet):
