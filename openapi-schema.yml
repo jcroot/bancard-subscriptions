@@ -1,0 +1,1609 @@
+openapi: 3.0.2
+info:
+  title: ''
+  version: ''
+paths:
+  /api/charge/:
+    get:
+      operationId: listTransactions
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+          description: ''
+      tags:
+      - api
+    post:
+      operationId: createTransaction
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+          description: ''
+      tags:
+      - api
+  /api/charge/{id}/:
+    get:
+      operationId: retrieveTransaction
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+          description: ''
+      tags:
+      - api
+    put:
+      operationId: updateTransaction
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+          description: ''
+      tags:
+      - api
+    patch:
+      operationId: partialUpdateTransaction
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Transaction'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+          description: ''
+      tags:
+      - api
+    delete:
+      operationId: destroyTransaction
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - api
+  /api/checkout/:
+    get:
+      operationId: listOrders
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+          description: ''
+      tags:
+      - api
+    post:
+      operationId: createOrder
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Order'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Order'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+      tags:
+      - api
+  /api/checkout/{id}/:
+    get:
+      operationId: retrieveOrder
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+      tags:
+      - api
+    put:
+      operationId: updateOrder
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Order'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Order'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+      tags:
+      - api
+    patch:
+      operationId: partialUpdateOrder
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Order'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Order'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+      tags:
+      - api
+    delete:
+      operationId: destroyOrder
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - api
+  /api/orders/:
+    get:
+      operationId: listOrderLists
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderList'
+          description: ''
+      tags:
+      - api
+    post:
+      operationId: createOrderList
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderList'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OrderList'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OrderList'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderList'
+          description: ''
+      tags:
+      - api
+  /api/orders/{id}/:
+    get:
+      operationId: retrieveOrderList
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderList'
+          description: ''
+      tags:
+      - api
+    put:
+      operationId: updateOrderList
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderList'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OrderList'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OrderList'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderList'
+          description: ''
+      tags:
+      - api
+    patch:
+      operationId: partialUpdateOrderList
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderList'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OrderList'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OrderList'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderList'
+          description: ''
+      tags:
+      - api
+    delete:
+      operationId: destroyOrderList
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - api
+  /api/profile/:
+    get:
+      operationId: listCustomers
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+          description: ''
+      tags:
+      - api
+    post:
+      operationId: createCustomer
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Customer'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Customer'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+          description: ''
+      tags:
+      - api
+  /api/profile/{id}/:
+    get:
+      operationId: retrieveCustomer
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+          description: ''
+      tags:
+      - api
+    put:
+      operationId: updateCustomer
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Customer'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Customer'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+          description: ''
+      tags:
+      - api
+    patch:
+      operationId: partialUpdateCustomer
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Customer'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Customer'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+          description: ''
+      tags:
+      - api
+    delete:
+      operationId: destroyCustomer
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - api
+  /api/plan/:
+    get:
+      operationId: listPlans
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Plan'
+          description: ''
+      tags:
+      - api
+    post:
+      operationId: createPlan
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Plan'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Plan'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Plan'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Plan'
+          description: ''
+      tags:
+      - api
+  /api/plan/{id}/:
+    get:
+      operationId: retrievePlan
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Plan'
+          description: ''
+      tags:
+      - api
+    put:
+      operationId: updatePlan
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Plan'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Plan'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Plan'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Plan'
+          description: ''
+      tags:
+      - api
+    patch:
+      operationId: partialUpdatePlan
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Plan'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Plan'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Plan'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Plan'
+          description: ''
+      tags:
+      - api
+    delete:
+      operationId: destroyPlan
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - api
+  /api/category/:
+    get:
+      operationId: listCategorys
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+          description: ''
+      tags:
+      - api
+    post:
+      operationId: createCategory
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Category'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Category'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+      tags:
+      - api
+  /api/category/{id}/:
+    get:
+      operationId: retrieveCategory
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+      tags:
+      - api
+    put:
+      operationId: updateCategory
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Category'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Category'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+      tags:
+      - api
+    patch:
+      operationId: partialUpdateCategory
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Category'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Category'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+      tags:
+      - api
+    delete:
+      operationId: destroyCategory
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - api
+  /api/product/:
+    get:
+      operationId: listProducts
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+          description: ''
+      tags:
+      - api
+    post:
+      operationId: createProduct
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Product'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+      tags:
+      - api
+  /api/product/{id}/:
+    get:
+      operationId: retrieveProduct
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+      tags:
+      - api
+    put:
+      operationId: updateProduct
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Product'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+      tags:
+      - api
+    patch:
+      operationId: partialUpdateProduct
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Product'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+      tags:
+      - api
+    delete:
+      operationId: destroyProduct
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - api
+  /api/plan_products/:
+    get:
+      operationId: listPlanProducts
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlanProduct'
+          description: ''
+      tags:
+      - api
+    post:
+      operationId: createPlanProduct
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlanProduct'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PlanProduct'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PlanProduct'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanProduct'
+          description: ''
+      tags:
+      - api
+  /api/plan_products/{id}/:
+    get:
+      operationId: retrievePlanProduct
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanProduct'
+          description: ''
+      tags:
+      - api
+    put:
+      operationId: updatePlanProduct
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlanProduct'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PlanProduct'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PlanProduct'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanProduct'
+          description: ''
+      tags:
+      - api
+    patch:
+      operationId: partialUpdatePlanProduct
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlanProduct'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PlanProduct'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PlanProduct'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanProduct'
+          description: ''
+      tags:
+      - api
+    delete:
+      operationId: destroyPlanProduct
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - api
+  /api/card_new/:
+    get:
+      operationId: listCards
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Card'
+          description: ''
+      tags:
+      - api
+    post:
+      operationId: createCard
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Card'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Card'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Card'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Card'
+          description: ''
+      tags:
+      - api
+  /api/card_new/{id}/:
+    get:
+      operationId: retrieveCard
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Card'
+          description: ''
+      tags:
+      - api
+    put:
+      operationId: updateCard
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Card'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Card'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Card'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Card'
+          description: ''
+      tags:
+      - api
+    patch:
+      operationId: partialUpdateCard
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Card'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Card'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Card'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Card'
+          description: ''
+      tags:
+      - api
+    delete:
+      operationId: destroyCard
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - api
+  /gettoken/:
+    post:
+      operationId: createAuthToken
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthToken'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthToken'
+          description: ''
+      tags:
+      - gettoken
+components:
+  schemas:
+    Transaction:
+      type: object
+      properties:
+        order_code:
+          type: string
+          maxLength: 20
+      required:
+      - order_code
+    Order:
+      type: object
+      properties:
+        customer_id:
+          type: integer
+        product_plan_id:
+          type: integer
+      required:
+      - customer_id
+      - product_plan_id
+    OrderList:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        order_code:
+          type: string
+          maxLength: 50
+        profile:
+          type: object
+          properties:
+            id:
+              type: integer
+              readOnly: true
+            first_name:
+              type: string
+              nullable: true
+              maxLength: 100
+            last_name:
+              type: string
+              nullable: true
+              maxLength: 100
+            company_name:
+              type: string
+              nullable: true
+              maxLength: 100
+            street_address:
+              type: string
+              nullable: true
+              maxLength: 255
+            city_name:
+              type: string
+              nullable: true
+              maxLength: 100
+            phone:
+              type: string
+              nullable: true
+              maxLength: 50
+            email_address:
+              type: string
+              format: email
+              nullable: true
+              maxLength: 100
+            user_id:
+              type: integer
+            is_api_user:
+              type: boolean
+            user:
+              type: integer
+          required:
+          - first_name
+          - last_name
+          - company_name
+          - street_address
+          - city_name
+          - phone
+          - email_address
+          - user
+          readOnly: true
+        product_plan:
+          type: object
+          properties:
+            id:
+              type: integer
+              readOnly: true
+            product:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  readOnly: true
+                category:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      readOnly: true
+                    title_category:
+                      type: string
+                      maxLength: 200
+                    slug:
+                      type: string
+                      nullable: true
+                      maxLength: 50
+                      pattern: ^[-a-zA-Z0-9_]+$
+                  required:
+                  - title_category
+                  readOnly: true
+                title_product:
+                  type: string
+                  maxLength: 255
+                description:
+                  type: string
+                  nullable: true
+                image_product:
+                  type: string
+                  format: binary
+              required:
+              - title_product
+              readOnly: true
+            plan:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  readOnly: true
+                price:
+                  type: number
+                title_plan:
+                  type: string
+                  maxLength: 200
+                installments:
+                  type: integer
+                  maximum: 32767
+                  minimum: -32768
+                fee_amount:
+                  type: string
+                  format: decimal
+                  multipleOf: 0.01
+                  maximum: 100000000
+                  minimum: -100000000
+              required:
+              - price
+              - title_plan
+              readOnly: true
+          readOnly: true
+      required:
+      - order_code
+    Customer:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        first_name:
+          type: string
+          nullable: true
+          maxLength: 100
+        last_name:
+          type: string
+          nullable: true
+          maxLength: 100
+        company_name:
+          type: string
+          nullable: true
+          maxLength: 100
+        street_address:
+          type: string
+          nullable: true
+          maxLength: 255
+        city_name:
+          type: string
+          nullable: true
+          maxLength: 100
+        phone:
+          type: string
+          nullable: true
+          maxLength: 50
+        email_address:
+          type: string
+          format: email
+          nullable: true
+          maxLength: 100
+        user_id:
+          type: integer
+        is_api_user:
+          type: boolean
+        user:
+          type: integer
+      required:
+      - first_name
+      - last_name
+      - company_name
+      - street_address
+      - city_name
+      - phone
+      - email_address
+      - user
+    Plan:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        price:
+          type: number
+        title_plan:
+          type: string
+          maxLength: 200
+        installments:
+          type: integer
+          maximum: 32767
+          minimum: -32768
+        fee_amount:
+          type: string
+          format: decimal
+          multipleOf: 0.01
+          maximum: 100000000
+          minimum: -100000000
+      required:
+      - price
+      - title_plan
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title_category:
+          type: string
+          maxLength: 200
+        slug:
+          type: string
+          nullable: true
+          maxLength: 50
+          pattern: ^[-a-zA-Z0-9_]+$
+      required:
+      - title_category
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        category:
+          type: object
+          properties:
+            id:
+              type: integer
+              readOnly: true
+            title_category:
+              type: string
+              maxLength: 200
+            slug:
+              type: string
+              nullable: true
+              maxLength: 50
+              pattern: ^[-a-zA-Z0-9_]+$
+          required:
+          - title_category
+          readOnly: true
+        title_product:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+          nullable: true
+        image_product:
+          type: string
+          format: binary
+      required:
+      - title_product
+    PlanProduct:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        product:
+          type: object
+          properties:
+            id:
+              type: integer
+              readOnly: true
+            category:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  readOnly: true
+                title_category:
+                  type: string
+                  maxLength: 200
+                slug:
+                  type: string
+                  nullable: true
+                  maxLength: 50
+                  pattern: ^[-a-zA-Z0-9_]+$
+              required:
+              - title_category
+              readOnly: true
+            title_product:
+              type: string
+              maxLength: 255
+            description:
+              type: string
+              nullable: true
+            image_product:
+              type: string
+              format: binary
+          required:
+          - title_product
+          readOnly: true
+        plan:
+          type: object
+          properties:
+            id:
+              type: integer
+              readOnly: true
+            price:
+              type: number
+            title_plan:
+              type: string
+              maxLength: 200
+            installments:
+              type: integer
+              maximum: 32767
+              minimum: -32768
+            fee_amount:
+              type: string
+              format: decimal
+              multipleOf: 0.01
+              maximum: 100000000
+              minimum: -100000000
+          required:
+          - price
+          - title_plan
+          readOnly: true
+    Card:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        customer_id:
+          type: integer
+      required:
+      - customer_id
+    AuthToken:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        token:
+          type: string
+          readOnly: true
+      required:
+      - username
+      - password

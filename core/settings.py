@@ -51,7 +51,8 @@ INSTALLED_APPS = [
     'transactions.apps.TransactionsConfig',
     'django_extensions',
     'rest_framework',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+    'rest_framework_swagger',
 ]
 
 AUTH_USER_MODEL = 'customers.UserProfile'
