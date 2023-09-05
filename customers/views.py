@@ -228,6 +228,7 @@ class CardNewViewSet(viewsets.ModelViewSet):
             if serializer.is_valid():
                 process_id = serializer.create_new_card()
                 return Response({
-                    'process_id': process_id
+                    'process_id': process_id,
+                    'url_redirect': f'/checkout/register_card/new?process_id={process_id}'
                 }, status=status.HTTP_201_CREATED)
             return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
