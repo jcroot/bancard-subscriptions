@@ -2,7 +2,7 @@ from rest_framework import routers
 from django.urls import include, path
 
 from customers.views import CustomerViewSet, CardNewViewSet
-from products.views import PlanViewSet, CategoryViewSet, ProductViewSet, PlanProductViewSet
+from products.views import PlanViewSet, CategoryViewSet, ProductViewSet, PlanProductViewSet, ProductPlansViewSet
 from transactions.views import TransactionViewSet, CheckoutViewSet, OrdersViewSet
 
 PREFIX = "api"
@@ -16,6 +16,7 @@ router.register(r'plan', PlanViewSet, 'plan')
 router.register(r'category', CategoryViewSet, 'category')
 router.register(r'product', ProductViewSet, 'product')
 router.register(r'plan_products', PlanProductViewSet, 'plan_products')
+router.register(r'product_plans', ProductPlansViewSet, 'product_plans')
 router.register(r'card_new', CardNewViewSet, 'card_new')
 
 urlpatterns = [

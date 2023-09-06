@@ -36,17 +36,34 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    category = CategorySerializer(read_only=True,)
+    category = CategorySerializer(read_only=True, )
 
     class Meta:
         model = Product
-        fields = '__all__'
+        fields = ['id', 'category', 'title_product', 'description', 'image_product']
 
 
 class PlanProductSerializer(serializers.ModelSerializer):
-    product = ProductSerializer(read_only=True,)
-    plan = PlanSerializer(read_only=True,)
+    products = serializers.SerializerMethodField()
 
     class Meta:
-        model = PlanProducts
-        fields = '__all__'
+        model = Plan
+        fields = ['id', 'title_plan', 'price', 'installments', 'fee_amount', 'products']
+
+    def get_products(self, obj: Plan):
+        planproducts = PlanProducts.objects.filter(plan=obj).values_list('product_id', flat=True)
+        products = Product.objects.filter(products__in=planproducts)
+        return ProductSerializer(products, many=True).data
+
+
+class ProductPlansSerializer(serializers.ModelSerializer):
+    plans = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Product
+        fields = ['id', 'title_product', 'description', 'image_product', 'category', 'plans']
+
+    def get_plans(self, obj: Product):
+        planproducts = PlanProducts.objects.filter(product=obj).values_list('plan_id', flat=True)
+        plans = Plan.objects.filter(plans__in=planproducts)
+        return PlanSerializer(plans, many=True).data

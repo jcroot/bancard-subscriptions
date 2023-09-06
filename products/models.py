@@ -29,7 +29,7 @@ class Product(models.Model):
     description = models.TextField(blank=True, null=True)
     image_product = models.ImageField(upload_to='photos/%Y/%m/%d', blank=True)
 
-    category = models.ForeignKey(Category, on_delete=models.DO_NOTHING)
+    category = models.ForeignKey(Category, on_delete=models.DO_NOTHING, related_name='categories')
 
     class Meta:
         db_table = 'products'
@@ -43,8 +43,8 @@ class PlanProducts(models.Model):
         verbose_name = "Product Plan"
         verbose_name_plural = "Product Plans"
 
-    plan = models.ForeignKey(Plan, on_delete=models.DO_NOTHING)
-    product = models.ForeignKey(Product, on_delete=models.DO_NOTHING)
+    plan = models.ForeignKey(Plan, on_delete=models.DO_NOTHING, related_name='plans')
+    product = models.ForeignKey(Product, on_delete=models.DO_NOTHING, related_name='products')
 
     def __str__(self):
         return f'{self.plan.title_plan} - {self.product.title_product} ({self.plan.price})'

@@ -5,7 +5,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .models import Plan, Category, Product, PlanProducts
-from .serializers import PlanSerializer, CategorySerializer, ProductSerializer, PlanProductSerializer
+from .serializers import PlanSerializer, CategorySerializer, ProductSerializer, PlanProductSerializer, \
+    ProductPlansSerializer
 
 
 class PlanViewSet(viewsets.ModelViewSet):
@@ -49,4 +50,13 @@ class PlanProductViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return PlanProducts.objects.all()
+        return Plan.objects.all()
+
+
+class ProductPlansViewSet(viewsets.ModelViewSet):
+    serializer_class = ProductPlansSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Product.objects.all()
