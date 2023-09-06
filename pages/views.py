@@ -11,10 +11,10 @@ from products.models import Product, PlanProducts
 
 # Create your views here.
 def index(request):
-    products = Product.objects.all()
+    plans = PlanProducts.objects.all()
 
     context = {
-        'products': products
+        'plans': plans
     }
 
     return render(request, 'pages/index.html', context)
