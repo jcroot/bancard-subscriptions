@@ -222,6 +222,11 @@ class CardNewViewSet(viewsets.ModelViewSet):
         queryset = CustomerCards.objects.all()
         return queryset
 
+    def retrieve(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        alias_token = serializer.update_alias_token(kwargs['pk'])
+        return Response({'alias_token': alias_token}, status=status.HTTP_200_OK)
+
     def create(self, request, *args, **kwargs):
         if 'customer_id' in request.data:
             serializer = self.get_serializer(data=request.data)

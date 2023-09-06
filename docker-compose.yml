@@ -17,6 +17,10 @@ services:
     volumes:
       - /tmp/app/mysqld:/var/run/mysqld
       - my-db:/var/lib/mysql
+    healthcheck:
+        test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+        timeout: 20s
+        retries: 10
   web:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
@@ -26,7 +30,8 @@ services:
       - .:/app
       - /tmp/app/mysqld:/run/mysqld
     depends_on:
-      - db-subscriptions
+      db-subscriptions:
+        condition: service_healthy
 volumes:
   my-db:
     driver: local

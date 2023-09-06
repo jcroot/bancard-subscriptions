@@ -25,8 +25,8 @@ class TransactionSerializer(serializers.ModelSerializer):
     def create_order(self):
         order = Orders.objects.get(order_code=self.order_code)
         try:
-            customer_card = CustomerCards.objects.get(customer_id=order.profile.id,
-                                                      customer__customercards__is_default=True)
+            customer_card = (CustomerCards.objects.exclude(alias_token__isnull=True).get(customer_id=order.profile.id,
+                                                      customer__customercards__is_default=True))
 
             response = BancardAPI().charge(shop_process_id=order.id,
                                            amount=order.product_plan.price,

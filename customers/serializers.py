@@ -51,3 +51,13 @@ class CardSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError('Error creating card')
         except Profile.DoesNotExist:
             raise serializers.ValidationError('Customer does not exist')
+
+
+    def update_alias_token(self, card_id):
+        try:
+            card_data = CustomerCards.objects.get(pk=card_id)
+            if card_data:
+                card_data.update_alias_token()
+                return card_data.alias_token
+        except CustomerCards.DoesNotExist:
+            raise serializers.ValidationError('Card does not exist')
