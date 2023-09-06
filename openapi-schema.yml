@@ -1083,6 +1083,141 @@ paths:
           description: ''
       tags:
       - api
+  /api/product_plans/:
+    get:
+      operationId: listProductPlans
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductPlans'
+          description: ''
+      tags:
+      - api
+    post:
+      operationId: createProductPlans
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductPlans'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProductPlans'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductPlans'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductPlans'
+          description: ''
+      tags:
+      - api
+  /api/product_plans/{id}/:
+    get:
+      operationId: retrieveProductPlans
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductPlans'
+          description: ''
+      tags:
+      - api
+    put:
+      operationId: updateProductPlans
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductPlans'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProductPlans'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductPlans'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductPlans'
+          description: ''
+      tags:
+      - api
+    patch:
+      operationId: partialUpdateProductPlans
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductPlans'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProductPlans'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductPlans'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductPlans'
+          description: ''
+      tags:
+      - api
+    delete:
+      operationId: destroyProductPlans
+      description: ''
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ''
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+      tags:
+      - api
   /api/card_new/:
     get:
       operationId: listCards
@@ -1329,66 +1464,30 @@ components:
             id:
               type: integer
               readOnly: true
-            product:
-              type: object
-              properties:
-                id:
-                  type: integer
-                  readOnly: true
-                category:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                      readOnly: true
-                    title_category:
-                      type: string
-                      maxLength: 200
-                    slug:
-                      type: string
-                      nullable: true
-                      maxLength: 50
-                      pattern: ^[-a-zA-Z0-9_]+$
-                  required:
-                  - title_category
-                  readOnly: true
-                title_product:
-                  type: string
-                  maxLength: 255
-                description:
-                  type: string
-                  nullable: true
-                image_product:
-                  type: string
-                  format: binary
-              required:
-              - title_product
+            title_plan:
+              type: string
+              maxLength: 200
+            price:
+              type: string
+              format: decimal
+              multipleOf: 0.01
+              maximum: 100000000
+              minimum: -100000000
+            installments:
+              type: integer
+              maximum: 32767
+              minimum: -32768
+            fee_amount:
+              type: string
+              format: decimal
+              multipleOf: 0.01
+              maximum: 100000000
+              minimum: -100000000
+            products:
+              type: string
               readOnly: true
-            plan:
-              type: object
-              properties:
-                id:
-                  type: integer
-                  readOnly: true
-                price:
-                  type: number
-                title_plan:
-                  type: string
-                  maxLength: 200
-                installments:
-                  type: integer
-                  maximum: 32767
-                  minimum: -32768
-                fee_amount:
-                  type: string
-                  format: decimal
-                  multipleOf: 0.01
-                  maximum: 100000000
-                  minimum: -100000000
-              required:
-              - price
-              - title_plan
-              readOnly: true
+          required:
+          - title_plan
           readOnly: true
       required:
       - order_code
@@ -1522,66 +1621,53 @@ components:
         id:
           type: integer
           readOnly: true
-        product:
-          type: object
-          properties:
-            id:
-              type: integer
-              readOnly: true
-            category:
-              type: object
-              properties:
-                id:
-                  type: integer
-                  readOnly: true
-                title_category:
-                  type: string
-                  maxLength: 200
-                slug:
-                  type: string
-                  nullable: true
-                  maxLength: 50
-                  pattern: ^[-a-zA-Z0-9_]+$
-              required:
-              - title_category
-              readOnly: true
-            title_product:
-              type: string
-              maxLength: 255
-            description:
-              type: string
-              nullable: true
-            image_product:
-              type: string
-              format: binary
-          required:
-          - title_product
+        title_plan:
+          type: string
+          maxLength: 200
+        price:
+          type: string
+          format: decimal
+          multipleOf: 0.01
+          maximum: 100000000
+          minimum: -100000000
+        installments:
+          type: integer
+          maximum: 32767
+          minimum: -32768
+        fee_amount:
+          type: string
+          format: decimal
+          multipleOf: 0.01
+          maximum: 100000000
+          minimum: -100000000
+        products:
+          type: string
           readOnly: true
-        plan:
-          type: object
-          properties:
-            id:
-              type: integer
-              readOnly: true
-            price:
-              type: number
-            title_plan:
-              type: string
-              maxLength: 200
-            installments:
-              type: integer
-              maximum: 32767
-              minimum: -32768
-            fee_amount:
-              type: string
-              format: decimal
-              multipleOf: 0.01
-              maximum: 100000000
-              minimum: -100000000
-          required:
-          - price
-          - title_plan
+      required:
+      - title_plan
+    ProductPlans:
+      type: object
+      properties:
+        id:
+          type: integer
           readOnly: true
+        title_product:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+          nullable: true
+        image_product:
+          type: string
+          format: binary
+        category:
+          type: integer
+        plans:
+          type: string
+          readOnly: true
+      required:
+      - title_product
+      - category
     Card:
       type: object
       properties:
