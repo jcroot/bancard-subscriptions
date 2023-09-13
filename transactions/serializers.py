@@ -23,23 +23,47 @@ class TransactionSerializer(serializers.ModelSerializer):
         return order_code
 
     def create_order(self):
-        order = Orders.objects.get(order_code=self.order_code)
         try:
-            customer_card = (CustomerCards.objects.exclude(alias_token__isnull=True).get(customer_id=order.profile.id,
-                                                      customer__customercards__is_default=True))
+            order = Orders.objects.get(order_code=self.order_code, active=True)
+            new_transaction = Transaction.objects.create_transaction(order=order)
 
-            response = BancardAPI().charge(shop_process_id=order.id,
-                                           amount=order.product_plan.price,
+            response = BancardAPI().charge(shop_process_id=new_transaction.id,
+                                           amount=new_transaction.amount,
                                            description=order.product_plan.plan.title_plan,
-                                           alias_token=customer_card.alias_token,
-                                           number_of_payments=order.product_plan.plan.number_of_payments)
+                                           alias_token=new_transaction.card.alias_token,
+                                           number_of_payments=new_transaction.number_of_payments)
 
             response_json = response.json()
+            if response.status_code == 200:
+                if response_json['status'] == 'success':
+                    order.active = False
+                    order.save(update_fields=['active'])
+
+                    new_transaction.response = response_json['confirmation']['response']
+                    new_transaction.response_details = response_json['confirmation']['response_details']
+                    new_transaction.authorization_number = response_json['confirmation']['authorization_number']
+                    new_transaction.ticket_number = response_json['confirmation']['ticket_number']
+                    new_transaction.response_code = response_json['confirmation']['response_code']
+                    new_transaction.response_description = response_json['confirmation']['response_description']
+                    new_transaction.security_information = response_json['confirmation']['security_information']
+
+            else:
+                new_transaction.response = "E"
+                new_transaction.response_description = response_json['messages'][0]['dsc']
+
+                if response_json['messages'][0]['key'] == 'CardAliasTokenExpiredError':
+                    new_transaction.card.update_alias_token()
+
+            new_transaction.save()
+
+            return new_transaction
 
         except CustomerCards.DoesNotExist:
             raise serializers.ValidationError(
                 'Customer don\'t have a default card. First add a card and set it as default')
-        return order
+
+        except Orders.DoesNotExist:
+            raise serializers.ValidationError('Order does not exist')
 
 
 class OrderSerializer(serializers.ModelSerializer):

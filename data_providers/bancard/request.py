@@ -1,3 +1,4 @@
+import decimal
 import hashlib
 
 import requests
@@ -85,7 +86,7 @@ class BancardAPI:
     def charge(self, shop_process_id, amount, description, alias_token, number_of_payments=1):
         charge_url = self.bancard_url + '/vpos/api/0.3/charge'
 
-        amount_str = f'{amount}.00'
+        amount_str = str(amount) if type(amount) == decimal.Decimal else f'{amount}.00'
         token = f'{self.private_key}{shop_process_id}charge{amount_str}{self.currency}{alias_token}'
         token = self.get_token(token)
 

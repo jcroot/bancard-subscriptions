@@ -9,7 +9,7 @@ from rest_framework.authtoken.models import Token
 from core import settings
 from products.models import PlanProducts
 from data_providers.bancard.request import BancardAPI
-from util.django_ext.models import ModelDiffMixin
+from util.django_ext.models import ModelDiffMixin, TimeStampMixin
 
 
 # Create your models here.
@@ -110,10 +110,10 @@ class OrderManager(models.Manager):
         return session_code
 
     def check_if_not_duplicate(self, profile, product_plan):
-        return super().filter(profile=profile, product_plan=product_plan).first()
+        return super().filter(profile=profile, product_plan=product_plan, active=True).first()
 
 
-class Orders(models.Model):
+class Orders(TimeStampMixin):
     class Meta:
         verbose_name = _('Order')
         verbose_name_plural = _('Orders')
@@ -121,6 +121,7 @@ class Orders(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.DO_NOTHING, related_name='profile')
     product_plan = models.ForeignKey(PlanProducts, related_name="product_plan", on_delete=models.DO_NOTHING)
     order_code = models.CharField(max_length=50)
+    active = models.BooleanField(default=True)
 
     objects = OrderManager()
 

@@ -10,20 +10,20 @@ from customers.models import Profile, CustomerCards
 
 # Create your models here.
 class TransactionManager(models.Manager):
-    def create_transaction(self, order: Orders):
+    def create_transaction(self, order: Orders, **kwargs):
         currency = 'PY'
         try:
-            card = order.profile.customercards_set.get(is_default=True)
+            card = order.profile.customercards_set.exclude(alias_token__isnull=True, is_default=False).first()
             amount = int(order.product_plan.plan.price) if card.card_type == 'credit' else int(
                 order.product_plan.plan.fee_amount)
 
-            number_of_payments = 1  # order.product_plan.plan.installments if card.card_type == 'credit' and settings.USE_INSTALLMENTS else 1
+            number_of_payments = order.product_plan.plan.installments if card.card_type == 'debit' else 1
 
             new_transaction = super().create(amount=amount, currency=currency, number_of_payments=number_of_payments,
                                              card=card,
                                              order=order)
         except CustomerCards.DoesNotExist:
-            new_transaction = None
+            raise Exception('Customer don\'t have a default card. First add a card and set it as default')
 
         return new_transaction
 

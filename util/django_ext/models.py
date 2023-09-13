@@ -1,9 +1,11 @@
+from datetime import datetime
+
 from django.db import models
 from django.forms.models import model_to_dict
 
 
 class TimeStampMixin(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=datetime.now, blank=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:

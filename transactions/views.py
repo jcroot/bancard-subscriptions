@@ -22,9 +22,11 @@ class TransactionViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            order = serializer.create_order()
+            transaction = serializer.create_order()
             return Response({
-                'order_code': order.order_code,
+                'order_code': transaction.order.order_code,
+                'description': transaction.response_description,
+                'status': "success" if transaction.response == "S" else "error"
             }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -42,7 +44,7 @@ class CheckoutViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             order = serializer.create_order()
             return Response({
-                'order_code': order.order_code,
+                'order_code': order.order_code
             }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
