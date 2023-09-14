@@ -101,7 +101,7 @@ class OrderListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Orders
-        fields = ('id', 'transactions', 'profile')
+        fields = ('id', 'order_code', 'transactions', 'profile')
 
     def get_transactions(self, order: Orders):
         transactions = Transaction.objects.filter(order_id=order.id)
