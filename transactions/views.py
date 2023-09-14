@@ -7,7 +7,7 @@ from rest_framework.response import Response
 
 from customers.models import Orders
 from transactions.models import Transaction
-from .serializers import TransactionSerializer, OrderSerializer, OrderListSerializer
+from .serializers import TransactionSerializer, OrderSerializer, OrderListSerializer, TransactionSummarySerializer
 
 
 # Create your views here.
@@ -15,6 +15,12 @@ class TransactionViewSet(viewsets.ModelViewSet):
     serializer_class = TransactionSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+
+    def retrieve(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        obj = get_object_or_404(queryset, order__order_code=self.kwargs['pk'], response_code__isnull=False)
+        serializer = self.get_serializer(obj, {'order_code': obj.order.order_code})
+        return Response(serializer.data)
 
     def get_queryset(self):
         return Transaction.objects.all()
@@ -54,10 +60,10 @@ class OrdersViewSet(viewsets.ModelViewSet):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
+    def retrieve(self, request, *args, **kwargs):
+        obj = get_object_or_404(Orders, order_code=self.kwargs['pk'])
+        serializer = self.get_serializer(obj)
+        return Response(serializer.data)
+
     def get_queryset(self):
         return Orders.objects.all()
-
-    def get_object(self):
-        queryset = self.get_queryset()
-        obj = get_object_or_404(queryset, order_code=self.kwargs['pk'])
-        return obj

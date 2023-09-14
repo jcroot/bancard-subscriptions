@@ -96,9 +96,25 @@ class OrderSerializer(serializers.ModelSerializer):
 
 
 class OrderListSerializer(serializers.ModelSerializer):
-    profile = CustomerSerializer(read_only=True, )
-    product_plan = PlanProductSerializer(read_only=True, )
+    transactions = serializers.SerializerMethodField()
+    profile = serializers.SerializerMethodField()
 
     class Meta:
         model = Orders
-        fields = ['id', 'order_code', 'profile', 'product_plan']
+        fields = ('id', 'transactions', 'profile')
+
+    def get_transactions(self, order: Orders):
+        transactions = Transaction.objects.filter(order_id=order.id)
+        return TransactionSummarySerializer(transactions, many=True).data
+
+    def get_profile(self, order: Orders):
+        profile = Profile.objects.get(pk=order.profile_id)
+        return CustomerSerializer(profile).data
+
+
+class TransactionSummarySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Transaction
+        fields = ['id', 'amount', 'response_code', 'response_description', 'response', 'authorization_number',
+                  'ticket_number']
+
