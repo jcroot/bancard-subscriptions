@@ -67,14 +67,12 @@ def profile(request):
 
                         new_transaction.save()
 
-    cards = CustomerCards.objects.filter(customer__user=request.user)
-    if cards:
+    if cards := CustomerCards.objects.filter(customer__user=request.user):
         with transaction.atomic():
             for card in cards.all():
                 card.update_alias_token()
 
-    customer = Profile.objects.filter(user_id=request.user.id).first()
-    if customer:
+    if customer := Profile.objects.filter(user_id=request.user.id).first():
         transactions = Transaction.objects.filter(order__profile=customer)
         transaction_data = None
         if transactions:
@@ -136,14 +134,12 @@ def default_card(request):
 
 
 def update_cards_default_false(user):
-    cards = CustomerCards.objects.filter(customer__user=user)
-    if cards:
+    if cards := CustomerCards.objects.filter(customer__user=user):
         cards.update(is_default=False)
 
 
 def rollback(request, transaction_id):
-    transaction_data = Transaction.objects.get(pk=transaction_id)
-    if transaction_data:
+    if transaction_data := Transaction.objects.get(pk=transaction_id):
         response = BancardAPI().rollback(transaction_id)
         response_json = response.json()
         if response_json['status'] == 'success':

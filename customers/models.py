@@ -68,8 +68,7 @@ class Profile(ModelDiffMixin, models.Model):
         return f'{self.last_name} {self.first_name}'
 
     def check_if_had_alias_token(self):
-        response = BancardAPI().users_cards(self.id)
-        if response:
+        if response := BancardAPI().users_cards(self.id):
             response_json = response.json()
             if response_json['status'] == 'success' and len(response_json['cards']) > 0:
                 for card in response_json['cards']:
@@ -148,8 +147,7 @@ class CustomerCards(models.Model):
         return f'{self.customer.first_name} {self.customer.last_name} - {self.card_masked_number} - {self.expiration_date}'
 
     def update_alias_token(self):
-        response = BancardAPI().users_cards(self.customer_id)
-        if response:
+        if response := BancardAPI().users_cards(self.customer_id):
             response_json = response.json()
             if response_json['status'] == 'success':
                 if len(response_json['cards']) > 0:

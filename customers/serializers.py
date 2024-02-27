@@ -36,14 +36,13 @@ class CardSerializer(serializers.ModelSerializer):
             customer = Profile.objects.get(pk=self.validated_data['customer_id'])
             customer_card = CustomerCards.objects.create(customer=customer)
 
-            response = BancardAPI().cards_new(
+
+            if response := BancardAPI().cards_new(
                 card_id=customer_card.id,
                 user_id=customer.id,
                 phone_number=customer.phone,
                 email_addr=customer.email_address
-            )
-
-            if response:
+            ):
                 response_json = response.json()
                 process_id = response_json['process_id']
                 return process_id
@@ -55,8 +54,7 @@ class CardSerializer(serializers.ModelSerializer):
 
     def update_alias_token(self, card_id):
         try:
-            card_data = CustomerCards.objects.get(pk=card_id)
-            if card_data:
+            if card_data := CustomerCards.objects.get(pk=card_id):
                 card_data.update_alias_token()
                 return card_data.alias_token
         except CustomerCards.DoesNotExist:

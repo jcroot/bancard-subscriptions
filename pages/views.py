@@ -65,10 +65,9 @@ def order_pay(request, code):
         'process_id': ''
     }
 
-    response = bancard.cards_new(card_id=customer_card.id, user_id=order.profile.id,
-                                 phone_number=order.profile.phone, email_addr=order.profile.email_address)
 
-    if response:
+    if response := bancard.cards_new(card_id=customer_card.id, user_id=order.profile.id,
+                                 phone_number=order.profile.phone, email_addr=order.profile.email_address):
         response_json = response.json()
         process_id = response_json['process_id']
 
