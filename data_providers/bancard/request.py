@@ -48,7 +48,7 @@ class BancardAPI:
                 'zimple': 'S'
             })
 
-        return requests.post(url=single_buy_url, headers=self.auth_headers, json=payload)
+        return requests.post(url=single_buy_url, headers=self.auth_headers, json=payload, timeout=60)
 
     def cards_new(self, card_id, user_id, phone_number, email_addr):
         cards_new_url = self.bancard_url + '/vpos/api/0.3/cards/new'
@@ -67,7 +67,7 @@ class BancardAPI:
                 'return_url': self.card_return_url + str(card_id)
             }
         }
-        return requests.post(url=cards_new_url, headers=self.auth_headers, json=payload)
+        return requests.post(url=cards_new_url, headers=self.auth_headers, json=payload, timeout=60)
 
     def users_cards(self, user_id):
         users_cards_url = self.bancard_url + f'/vpos/api/0.3/users/{user_id}/cards'
@@ -81,7 +81,7 @@ class BancardAPI:
                 'token': token
             }
         }
-        return requests.post(url=users_cards_url, headers=self.auth_headers, json=payload)
+        return requests.post(url=users_cards_url, headers=self.auth_headers, json=payload, timeout=60)
 
     def charge(self, shop_process_id, amount, description, alias_token, number_of_payments=1):
         charge_url = self.bancard_url + '/vpos/api/0.3/charge'
@@ -104,7 +104,7 @@ class BancardAPI:
             },
         }
 
-        return requests.post(url=charge_url, headers=self.auth_headers, json=payload)
+        return requests.post(url=charge_url, headers=self.auth_headers, json=payload, timeout=60)
 
     def remove_card(self, user_id, alias_token):
         remove_card_url = self.bancard_url + f'/vpos/api/0.3/users/{user_id}/cards'
@@ -120,7 +120,7 @@ class BancardAPI:
             }
         }
 
-        return requests.delete(url=remove_card_url, headers=self.auth_headers, json=payload)
+        return requests.delete(url=remove_card_url, headers=self.auth_headers, json=payload, timeout=60)
 
     def rollback(self, shop_process_id):
         rollback_url = self.bancard_url + '/vpos/api/0.3/single_buy/rollback'
@@ -136,7 +136,7 @@ class BancardAPI:
             }
         }
 
-        return requests.post(url=rollback_url, headers=self.auth_headers, json=payload)
+        return requests.post(url=rollback_url, headers=self.auth_headers, json=payload, timeout=60)
 
     def get_buy_single_confirmation(self, shop_process_id):
         confirmation_url = self.bancard_url + '/vpos/api/0.3/single_buy/confirmations'
@@ -152,7 +152,7 @@ class BancardAPI:
             }
         }
 
-        return requests.post(url=confirmation_url, headers=self.auth_headers, json=payload)
+        return requests.post(url=confirmation_url, headers=self.auth_headers, json=payload, timeout=60)
 
     def get_token(self, token_str):
         return hashlib.md5(token_str.encode()).hexdigest()
